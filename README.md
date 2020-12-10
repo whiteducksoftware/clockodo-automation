@@ -11,4 +11,4 @@ The purpose of this project are two things:
 - Azure Biceps 💪 to generate ARM templates
 - DevContainer
 
-![architecture](assets/clockodo-backup-solution.svg)
+![architecture](assets/clockodo-backup-solution.png)
