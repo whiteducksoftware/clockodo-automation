@@ -27,14 +27,7 @@
         "sku": {
           "name": "standard",
           "family": "A"
-        }
-      }
-    },
-    {
-      "type": "Microsoft.KeyVault/vaults/accessPolicies",
-      "apiVersion": "2019-09-01",
-      "name": "add",
-      "properties": {
+        },
         "accessPolicies": [
           {
             "tenantId": "[parameters('tenant')]",

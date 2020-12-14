@@ -11,12 +11,6 @@ resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
       name: 'standard'
       family: 'A'
     }
-  }
-}
-
-resource akv_policies 'Microsoft.KeyVault/vaults/accessPolicies@2019-09-01' = {
-  name: 'add'
-  properties: {
     accessPolicies: [
       {
         tenantId: tenant
