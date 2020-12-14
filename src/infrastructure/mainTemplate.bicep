@@ -25,6 +25,9 @@ resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
       }
     ]
   }
+  tags: {
+    environment: environment
+  }
 }
 
 resource blob_stac 'Microsoft.Storage/storageAccounts@2019-06-01' = {
