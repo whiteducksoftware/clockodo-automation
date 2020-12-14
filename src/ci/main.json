@@ -1,0 +1,67 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "tenant": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "service_principal": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "environment": {
+      "type": "string",
+      "defaultValue": "dev"
+    }
+  },
+  "functions": [],
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2019-09-01",
+      "name": "clock-dev-akv",
+      "location": "westeurope",
+      "properties": {
+        "tenantId": "[parameters('tenant')]",
+        "sku": {
+          "name": "standard",
+          "family": "A"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "apiVersion": "2019-09-01",
+      "name": "add",
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[parameters('tenant')]",
+            "objectId": "[parameters('service_principal')]",
+            "permissions": {
+              "secrets": [
+                "get",
+                "list",
+                "set"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2019-06-01",
+      "name": "clock0dev0stac",
+      "location": "westeurope",
+      "kind": "BlobStorage",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "tags": {
+        "environment": "[parameters('environment')]"
+      }
+    }
+  ]
+}
