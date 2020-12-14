@@ -46,6 +46,11 @@ RUN apt-get update \
   && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
   && mv terraform /usr/bin \
   && rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+   \
+  # install bicep
+  && curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64 \
+  && chmod +x ./bicep \
+  && mv ./bicep /usr/local/bin/bicep \
   \
   && apt-get update \
   && apt install -y build-essential \
@@ -60,9 +65,4 @@ RUN apt-get update \
   && yarn global add @angular/cli \
   \
   && apt-get clean \
-  && rm -rf packages-microsoft-prod.deb /var/lib/{apt,dpkg,cache,log}/ \
-  \
-  # install bicep
-  && curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64 \
-  && chmod +x ./bicep \
-  && mv ./bicep /usr/local/bin/bicep
+  && rm -rf packages-microsoft-prod.deb /var/lib/{apt,dpkg,cache,log}/ 
