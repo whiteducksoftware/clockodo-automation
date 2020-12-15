@@ -24,15 +24,11 @@
     },
     "asp_sku": {
       "type": "string",
-      "defaultValue": "F1"
-    },
-    "log_analytics_sku": {
-      "type": "string",
-      "defaultValue": "Free"
+      "defaultValue": "B1"
     },
     "retention_days": {
       "type": "int",
-      "defaultValue": 60
+      "defaultValue": 30
     }
   },
   "functions": [],
@@ -77,6 +73,9 @@
       "kind": "BlobStorage",
       "sku": {
         "name": "[parameters('blob_sku')]"
+      },
+      "properties": {
+        "accessTier": "Cool"
       },
       "tags": {
         "environment": "[parameters('environment')]"
@@ -130,20 +129,20 @@
       "properties": {
         "Flow_Type": "Bluefield",
         "Application_Type": "web",
-        "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', 'clock_dev_analytics')]"
+        "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', 'clock-dev-analytics')]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.OperationalInsights/workspaces', 'clock_dev_analytics')]"
+        "[resourceId('Microsoft.OperationalInsights/workspaces', 'clock-dev-analytics')]"
       ]
     },
     {
       "type": "Microsoft.OperationalInsights/workspaces",
       "apiVersion": "2020-08-01",
-      "name": "clock_dev_analytics",
+      "name": "clock-dev-analytics",
       "location": "[parameters('location')]",
       "properties": {
         "sku": {
-          "name": "[parameters('log_analytics_sku')]"
+          "name": "PerGB2018"
         },
         "retentionInDays": "[parameters('retention_days')]"
       },

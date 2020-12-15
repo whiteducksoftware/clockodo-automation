@@ -3,9 +3,8 @@ param service_principal string = ''
 param environment string = 'dev'
 param location string = 'westeurope'
 param blob_sku string = 'Standard_LRS'
-param asp_sku string = 'F1'
-param log_analytics_sku string = 'Free'
-param retention_days int = 60
+param asp_sku string = 'B1'
+param retention_days int = 30
 
 var runtime_stack = 'DOTNETCORE|3.0'
 
@@ -45,6 +44,9 @@ resource blob_stac 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   kind: 'BlobStorage'
   sku: {
     name: blob_sku
+  }
+  properties: {
+    accessTier: 'Cool'
   }
   tags: {
     environment: environment 
@@ -104,11 +106,11 @@ resource app_insights 'microsoft.insights/components@2020-02-02-preview' = {
 
 //log analytics workspace 
 resource log_analytics 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
-  name: 'clock_dev_analytics'
+  name: 'clock-dev-analytics'
   location: location
   properties: {
     sku: {
-      name: log_analytics_sku
+      name: 'PerGB2018'
     }
     retentionInDays: retention_days
   }
