@@ -189,7 +189,7 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Enties",
+			"name": "Entries",
 			"item": [
 				{
 					"name": "Get all entries ",
