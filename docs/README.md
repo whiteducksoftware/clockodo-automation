@@ -3,26 +3,11 @@
 🚩 Ressources:
 
 - [Customers](#Customers)
-
-  - GET /api/customers
-  - GET /api/customers/[ID]
-
 - [Projects](#Projects)
-
-  - GET /api/projects/[ID]
-
 - [Services](#Services)
-
-  - GET /api/services
-  - GET /api/services/[ID]
-
 - [Entries](#Entries)
-
-  - GET /api/entries
-  - GET /api/entries/[ID]
-
 - [Tasks](#Tasks)
-  - GET /api/tasks
+- [Entrygroups](#Entrygroups)
 
 ## Customers
 
@@ -112,7 +97,7 @@
 
 ---
 
-### Revenue_factor
+**Revenue_factor**
 
 > Factor with which revenues and hourly rates have to multiplicated in order to get the effective values In case of a project which has a hard budget and has been completed with a budget usage of 400%, the factor is "0.25".
 >
@@ -419,6 +404,7 @@ curl -v
             public int revenue { get; set; }
         }
 ```
+
 ---
 
 | Flag     | parameters |  Type   | Description                                                          |
@@ -460,3 +446,69 @@ curl -v
 
 ---
 
+## Entrygroups
+
+---
+
+| Parameter                                   |  Type   | Description                                                                                                                                                                                                                                                                                       |
+| :------------------------------------------ | :-----: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| groupedBy                                   | string  | Group criterion of the current group                                                                                                                                                                                                                                                              |
+| group                                       | string  | Identificator of the current group                                                                                                                                                                                                                                                                |
+| name                                        | string  | Description of the curent group                                                                                                                                                                                                                                                                   |
+| number                                      | string  | Data number of the group (customers number, personnel number, ..) Only if the group criterion is customers\*id, projects_id, services_id or users_id                                                                                                                                              |
+| note                                        | string  | Note of the current groupOnly if the group criterion is customers_id, projects_id or services_id                                                                                                                                                                                                  |
+| restrictions                                |  array  | Restrictions which apply to the current group appart from the current groupedBy criterion and time criterions                                                                                                                                                                                     |
+| duration                                    | integer | Duration of all entries in the group                                                                                                                                                                                                                                                              |
+| [revenue]                                   |  float  | Revenue of all entries in the group Only with necessary access rights to group                                                                                                                                                                                                                    |
+| [budget_used]                               | boolean | Has budget been used for at least one entry in the group? Only with necessary access rights to group                                                                                                                                                                                              |
+| [has_budget_revenues* billed]               | boolean | Has at least one group entry, which belongs to a project with hard budget, already been billed? Only with necessary access rights to group                                                                                                                                                        |
+| [has_budget_revenues_ not_billed]           | boolean | Has at least one group entry, which belongs to a project with hard budget, not been billed so far? Only with necessary access rights to group                                                                                                                                                     |
+| [has_non_budget_revenues_ billed]           | boolean | Has at least one group entry, which does not belong to a project with hard budget, already been billed? Only with necessary access rights to group                                                                                                                                                |
+| [has_non_budget_revenues_ not_billed]       | boolean | Has at least one group entry, which does not belong to a project with hard budget, not been billed so far? Only with necessary access rights to group                                                                                                                                             |
+| [hourly_rate]                               |  float  | Average hourly\*rate for the group Only with necessary access rights to group                                                                                                                                                                                                                     |
+| [hourly_rate_is_equal* and_has_no_lumpSums] | boolean | Is the hourly rate equal for all billable entries in the group and does the group not have any lump sum entries? In this case the revenue can be calculated like this: revenue = hourly_rate \* durationThis is useful especially for billing purposes.Only with necessary access rights to group |
+| [duration_without_rounding]                 | integer | Duration without roundingOnly if rounding has been requested                                                                                                                                                                                                                                      |
+| [revenue_without_rounding]                  |  float  | Revenue without roundingOnly if rounding has been requested only with necessary access rights to group                                                                                                                                                                                            |
+| [rounding_success]                          | boolean | Could the revenue be rounded successfully or hasn't it been possible because of different hourly rates in the groupOnly on the last group if rounding has been requested only with necessary access rights to group                                                                               |
+| [sub_groups]                                |  array  | If multiple group criterions have been requested, the next group level will be listed as subgroups                                                                                                                                                                                                |
+
+---
+
+📡 Request
+
+```basic
+  GET /api/entrygroups
+```
+
+💡 Response
+
+```csharp
+  public class Rootobject
+        {
+            public object[] groups { get; set; }
+        }
+```
+
+---
+
+| Flag     | parameters                                        |       Type       | Description                                                                              |
+| :------- | :------------------------------------------------ | :--------------: | ---------------------------------------------------------------------------------------- |
+| Required | time_since                                        |      string      | Filter start time e.g. in format “YYYY-MM-DD HH:MM:SS”;                                  |
+| Required | time_until                                        |      string      | Filter end time                                                                          |
+| Required | grouping                                          |      array       | Grouping of the entries; groups will be nested of multiple grouping option are selected  |
+| Optional | filter[users_id]                                  |     integer      | Filter for a selected co-worker                                                          |
+| Optional | filter[customers_id]                              |     integer      | Filter for a selected customer                                                           |
+| Optional | filter[projects_id]                               |     integer      | Filter for a selected project                                                            |
+| Optional | filter[services_id]                               |     integer      | Filter for a selected service                                                            |
+| Optional | filter[lumpSums_id]                               |     integer      | Filter for a lump sum                                                                    |
+| Optional | filter[billable]                                  |     integer      | Filter for a billability 0, 1 or 2 billable = 2 represents "billable and already billed" |
+| Optional | filter[text] / filter[texts_id]                   | string / integer | Filter for a text                                                                        |
+| Optional | filter[budget_type]                               |      string      | Filter for types of budgets strict, strict-completed, strict-incomplete, soft, soft-completed, soft-incomplete, without,without-strict|
+| Optional | round_to_minutes                                  |     integer      | Activation of rounding of time durations to the given count of minutes; e.g. "15" for rounding to quarter hours (Default 0)|
+| Optional | prepend*customer_to* project_name                 |     boolean      | Project names will be prefixed with customer names (Default true) |
+| Optional | calc*also_revenues_for* projects_with_hard_budget |     boolean      | By default, revenues for projects with hard budgets will no be calculated. If you activate this option, the sum of all revenues to this project can be more than the project budget (Default false)|
+
+---
+
+**Grouping**
+>Selected values of this set: [customers_id, projects_id, services_id, users_id, texts_id, >lumpSums_id, billable, is_lumpSum, year, week, month, day] Example in HTTP POST notation: >grouping[]=customers_id&grouping[]=users_id
