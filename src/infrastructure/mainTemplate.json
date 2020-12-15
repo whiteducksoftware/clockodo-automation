@@ -4,11 +4,11 @@
   "parameters": {
     "tenant": {
       "type": "string",
-      "defaultValue": ""
+      "defaultValue": "f1847c27-90be-4b38-a1b7-bd3a2029122f"
     },
     "service_principal": {
       "type": "string",
-      "defaultValue": ""
+      "defaultValue": "fb0cf6ad-f076-419a-909e-d8751e8ae93c"
     },
     "environment": {
       "type": "string",
@@ -33,9 +33,24 @@
   },
   "functions": [],
   "variables": {
-    "runtime_stack": "DOTNETCORE|3.0"
+    "runtime_stack": "DOTNETCORE|3.0",
+    "guid": "pid-634ee6d0-daae-4676-8dcf-20e9062d36de",
+    "schema_var": "$schema"
   },
   "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('guid')]",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "schema_var": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": []
+        }
+      }
+    },
     {
       "type": "Microsoft.KeyVault/vaults",
       "apiVersion": "2019-09-01",

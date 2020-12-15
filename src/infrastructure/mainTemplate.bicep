@@ -1,5 +1,5 @@
-param tenant string = ''
-param service_principal string = ''
+param tenant string = 'f1847c27-90be-4b38-a1b7-bd3a2029122f'
+param service_principal string = 'fb0cf6ad-f076-419a-909e-d8751e8ae93c'
 param environment string = 'dev'
 param location string = 'westeurope'
 param blob_sku string = 'Standard_LRS'
@@ -7,6 +7,20 @@ param asp_sku string = 'B1'
 param retention_days int = 30
 
 var runtime_stack = 'DOTNETCORE|3.0'
+var guid = 'pid-634ee6d0-daae-4676-8dcf-20e9062d36de'
+
+// deployment 
+resource deployment 'Microsoft.Resources/deployments@2020-06-01' = {
+  name: guid
+  properties: {
+    mode: 'Incremental'
+    template: {
+      $schema: 'https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#'
+      contentVersion: '1.0.0.0'
+      resources: []
+    }
+  }
+}
 
 // keyvault
 resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
