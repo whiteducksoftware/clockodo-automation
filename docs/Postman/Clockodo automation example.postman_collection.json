@@ -16,12 +16,12 @@
 							"basic": [
 								{
 									"key": "password",
-									"value": "ph0yh47442fuixrozjv5jcpaujr8hj9l",
+									"value": "",
 									"type": "string"
 								},
 								{
 									"key": "username",
-									"value": "suad@wolgram.com",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -47,21 +47,6 @@
 				{
 					"name": "Search for customers by Id",
 					"request": {
-						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "ph0yh47442fuixrozjv5jcpaujr8hj9l",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "suad@wolgram.com",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -90,21 +75,6 @@
 				{
 					"name": "Get a specific project by Id",
 					"request": {
-						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "ph0yh47442fuixrozjv5jcpaujr8hj9l",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "suad@wolgram.com",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -138,12 +108,12 @@
 							"basic": [
 								{
 									"key": "password",
-									"value": "ph0yh47442fuixrozjv5jcpaujr8hj9l",
+									"value": "",
 									"type": "string"
 								},
 								{
 									"key": "username",
-									"value": "suad@wolgram.com",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -172,6 +142,21 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -214,12 +199,12 @@
 							"basic": [
 								{
 									"key": "password",
-									"value": "ph0yh47442fuixrozjv5jcpaujr8hj9l",
+									"value": "",
 									"type": "string"
 								},
 								{
 									"key": "username",
-									"value": "suad@wolgram.com",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -260,12 +245,12 @@
 							"basic": [
 								{
 									"key": "password",
-									"value": "ph0yh47442fuixrozjv5jcpaujr8hj9l",
+									"value": "",
 									"type": "string"
 								},
 								{
 									"key": "username",
-									"value": "suad@wolgram.com",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -311,6 +296,21 @@
 				{
 					"name": "List tasks of the past days",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -366,6 +366,21 @@
 				{
 					"name": "Get request groups",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
