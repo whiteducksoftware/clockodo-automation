@@ -511,4 +511,4 @@ curl -v
 ---
 
 **Grouping**
->Selected values of this set: [customers_id, projects_id, services_id, users_id, texts_id, >lumpSums_id, billable, is_lumpSum, year, week, month, day] Example in HTTP POST notation: >grouping[]=customers_id&grouping[]=users_id
+>Selected values of this set: [customers_id, projects_id, services_id, users_id, texts_id, lumpSums_id, billable, is_lumpSum, year, week, month, day] Example in HTTP POST notation: grouping[]=customers_id&grouping[]=users_id
