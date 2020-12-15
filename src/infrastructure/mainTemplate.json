@@ -1,0 +1,154 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "tenant": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "service_principal": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "environment": {
+      "type": "string",
+      "defaultValue": "dev"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "westeurope"
+    },
+    "blob_sku": {
+      "type": "string",
+      "defaultValue": "Standard_LRS"
+    },
+    "asp_sku": {
+      "type": "string",
+      "defaultValue": "B1"
+    },
+    "retention_days": {
+      "type": "int",
+      "defaultValue": 30
+    }
+  },
+  "functions": [],
+  "variables": {
+    "runtime_stack": "DOTNETCORE|3.0"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2019-09-01",
+      "name": "clock-dev-akv",
+      "location": "[parameters('location')]",
+      "properties": {
+        "tenantId": "[parameters('tenant')]",
+        "sku": {
+          "name": "standard",
+          "family": "A"
+        },
+        "accessPolicies": [
+          {
+            "tenantId": "[parameters('tenant')]",
+            "objectId": "[parameters('service_principal')]",
+            "permissions": {
+              "secrets": [
+                "get",
+                "list",
+                "set"
+              ]
+            }
+          }
+        ]
+      },
+      "tags": {
+        "environment": "[parameters('environment')]"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2019-06-01",
+      "name": "clock0dev0stac",
+      "location": "[parameters('location')]",
+      "kind": "BlobStorage",
+      "sku": {
+        "name": "[parameters('blob_sku')]"
+      },
+      "properties": {
+        "accessTier": "Cool"
+      },
+      "tags": {
+        "environment": "[parameters('environment')]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2020-06-01",
+      "name": "clock-dev-asp",
+      "location": "[parameters('location')]",
+      "kind": "linux",
+      "sku": {
+        "name": "[parameters('asp_sku')]"
+      },
+      "properties": {
+        "reserved": true
+      },
+      "tags": {
+        "environment": "[parameters('environment')]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2020-06-01",
+      "name": "clock-dev-funcapp",
+      "location": "[parameters('location')]",
+      "tags": {
+        "environment": "[parameters('environment')]"
+      },
+      "kind": "functionapp",
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'clock-dev-asp')]",
+        "siteConfig": {
+          "linuxFxVersion": "[variables('runtime_stack')]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', 'clock-dev-asp')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', 'clock0dev0stac')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Insights/components",
+      "apiVersion": "2020-02-02-preview",
+      "name": "clock-dev-appinsights",
+      "location": "[parameters('location')]",
+      "kind": "web",
+      "tags": {
+        "environment": "[parameters('environment')]"
+      },
+      "properties": {
+        "Flow_Type": "Bluefield",
+        "Application_Type": "web",
+        "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', 'clock-dev-analytics')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', 'clock-dev-analytics')]"
+      ]
+    },
+    {
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "apiVersion": "2020-08-01",
+      "name": "clock-dev-analytics",
+      "location": "[parameters('location')]",
+      "properties": {
+        "sku": {
+          "name": "PerGB2018"
+        },
+        "retentionInDays": "[parameters('retention_days')]"
+      },
+      "tags": {
+        "environment": "[parameters('environment')]"
+      }
+    }
+  ]
+}
