@@ -45,8 +45,23 @@
 					"response": []
 				},
 				{
-					"name": "Search for customers by Id",
+					"name": "Search for customers by id",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -73,8 +88,23 @@
 			"name": "Projcets",
 			"item": [
 				{
-					"name": "Get a specific project by Id",
+					"name": "Get a specific project by id",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -101,7 +131,7 @@
 			"name": "Services",
 			"item": [
 				{
-					"name": "Get all Services",
+					"name": "Get all services",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -137,7 +167,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Service by Id",
+					"name": "Get service by id",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -238,7 +268,7 @@
 					"response": []
 				},
 				{
-					"name": "Get all with Optionale Parameter",
+					"name": "Get all with optionale parameter",
 					"request": {
 						"auth": {
 							"type": "basic",
