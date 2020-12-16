@@ -33,9 +33,24 @@
   },
   "functions": [],
   "variables": {
-    "runtime_stack": "DOTNETCORE|3.0"
+    "runtime_stack": "DOTNETCORE|3.0",
+    "guid": "pid-634ee6d0-daae-4676-8dcf-20e9062d36de",
+    "schema": "$schema: https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#"
   },
   "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('guid')]",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": []
+        }
+      }
+    },
     {
       "type": "Microsoft.KeyVault/vaults",
       "apiVersion": "2019-09-01",
@@ -43,6 +58,7 @@
       "location": "[parameters('location')]",
       "properties": {
         "tenantId": "[parameters('tenant')]",
+        "softDeleteRetentionInDays": 60,
         "sku": {
           "name": "standard",
           "family": "A"
