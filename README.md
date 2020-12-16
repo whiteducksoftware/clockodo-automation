@@ -15,10 +15,10 @@
     <img src="https://img.shields.io/badge/terraform%20-%235835CC.svg?&style=for-the-badge&logo=terraform&logoColor=white">
     </a>
   <a href="https://github.com/Azure/bicep">
-    <img src="https://img.shields.io/static/v1?label=Azure 💪&message=v0.2.59&style=for-the-badge&logo&color=brightgreen">
+    <img src="https://img.shields.io/static/v1?label=Azure-Bicep&message=v0.2.59&style=for-the-badge&logo&color=brightgreen">
   </a>
   <a href="https://docs.microsoft.com/en-us/dotnet/csharp/">
-    <img src="https://img.shields.io/static/v1?label=Azure FUNC%20&message=v3.0&style=for-the-badge&color=blue">
+    <img src="https://img.shields.io/static/v1?label=Azure-FUNC%20&message=v3.0&style=for-the-badge&color=blue">
   </a>
   <a href="https://docs.microsoft.com/en-us/dotnet/csharp/">
     <img src="https://img.shields.io/static/v1?label=.net%20&message=v3.1&style=for-the-badge&color=blue">
