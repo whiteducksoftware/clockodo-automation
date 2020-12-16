@@ -268,7 +268,7 @@
 					"response": []
 				},
 				{
-					"name": "Get all with optionale parameter",
+					"name": "Get all entries with optionale parameter",
 					"request": {
 						"auth": {
 							"type": "basic",
