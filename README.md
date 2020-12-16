@@ -31,7 +31,7 @@
 ---
 
 <p align="center">
-  <img src="assets/clockodo-backup-solution_transparent.png"/>
+  <img src="assets/clockodo-backup-solution_transparent.png" width="700"/>
 </p>
 
 ---
