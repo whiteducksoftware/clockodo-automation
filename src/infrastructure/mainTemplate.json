@@ -4,11 +4,11 @@
   "parameters": {
     "tenant": {
       "type": "string",
-      "defaultValue": "f1847c27-90be-4b38-a1b7-bd3a2029122f"
+      "defaultValue": ""
     },
     "service_principal": {
       "type": "string",
-      "defaultValue": "fb0cf6ad-f076-419a-909e-d8751e8ae93c"
+      "defaultValue": ""
     },
     "environment": {
       "type": "string",
@@ -58,6 +58,7 @@
       "location": "[parameters('location')]",
       "properties": {
         "tenantId": "[parameters('tenant')]",
+        "softDeleteRetentionInDays": 60,
         "sku": {
           "name": "standard",
           "family": "A"

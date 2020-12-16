@@ -1,5 +1,5 @@
-param tenant string = 'f1847c27-90be-4b38-a1b7-bd3a2029122f'
-param service_principal string = 'fb0cf6ad-f076-419a-909e-d8751e8ae93c'
+param tenant string = ''
+param service_principal string = ''
 param environment string = 'dev'
 param location string = 'westeurope'
 param blob_sku string = 'Standard_LRS'
@@ -29,6 +29,7 @@ resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
   location: location
   properties: {
     tenantId: tenant
+    softDeleteRetentionInDays: 60
     sku: {
       name: 'standard'
       family: 'A'
