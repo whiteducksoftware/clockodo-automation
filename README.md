@@ -31,7 +31,7 @@
 ---
 
 <p align="center">
-  <img src="assets/clockodo-backup-solution_transparent.png" alt="Sublime's custom image"/>
+  <img src="assets/clockodo-backup-solution_transparent.png"/>
 </p>
 
 ---
