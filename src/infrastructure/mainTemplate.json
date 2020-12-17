@@ -33,6 +33,7 @@
   },
   "functions": [],
   "variables": {
+    "function_app_name": "clock-dev-funcapp",
     "runtime_stack": "DOTNETCORE|3.0",
     "guid": "pid-634ee6d0-daae-4676-8dcf-20e9062d36de",
     "schema": "$schema: https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#"
@@ -67,6 +68,17 @@
           {
             "tenantId": "[parameters('tenant')]",
             "objectId": "[parameters('service_principal')]",
+            "permissions": {
+              "secrets": [
+                "get",
+                "list",
+                "set"
+              ]
+            }
+          },
+          {
+            "tenantId": "[parameters('tenant')]",
+            "objectId": "[reference(resourceId('Microsoft.Web/sites', variables('function_app_name')), '2020-06-01', 'Full').identity.principalId]",
             "permissions": {
               "secrets": [
                 "get",
@@ -116,7 +128,7 @@
     {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2020-06-01",
-      "name": "clock-dev-funcapp",
+      "name": "[variables('function_app_name')]",
       "location": "[parameters('location')]",
       "tags": {
         "environment": "[parameters('environment')]"
@@ -127,6 +139,9 @@
         "siteConfig": {
           "linuxFxVersion": "[variables('runtime_stack')]"
         }
+      },
+      "identity": {
+        "type": "SystemAssigned"
       },
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', 'clock-dev-asp')]",

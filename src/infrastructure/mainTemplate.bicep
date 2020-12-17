@@ -6,9 +6,9 @@ param blob_sku string = 'Standard_LRS'
 param asp_sku string = 'B1'
 param retention_days int = 30
 
+var function_app_name = 'clock-dev-funcapp'
 var runtime_stack = 'DOTNETCORE|3.0'
 var guid = 'pid-634ee6d0-daae-4676-8dcf-20e9062d36de'
-var schema = '$schema: https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#'
 
 // deployment 
 resource deployment 'Microsoft.Resources/deployments@2020-06-01' = {
@@ -46,6 +46,17 @@ resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
           ]
         }
       }
+      {
+        tenantId: tenant
+        objectId: reference(resourceId('Microsoft.Web/sites', function_app_name), '2020-06-01', 'Full').identity.principalId
+        permissions: {
+          secrets: [
+            'get'
+            'list'
+            'set'
+          ]
+        }
+      } 
     ]
   }
   tags: {
@@ -87,7 +98,7 @@ resource app_service_plan 'Microsoft.Web/serverfarms@2020-06-01' = {
 
 // function app
 resource function_app 'Microsoft.Web/sites@2020-06-01' = {
-  name: 'clock-dev-funcapp'
+  name: function_app_name
   location: location
   tags: {
     environment: environment
@@ -102,6 +113,9 @@ resource function_app 'Microsoft.Web/sites@2020-06-01' = {
     siteConfig: {
       linuxFxVersion: runtime_stack
     }
+  }
+  identity: {
+    type: 'SystemAssigned'
   }
 }
 
