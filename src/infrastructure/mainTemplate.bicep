@@ -9,7 +9,6 @@ param retention_days int = 30
 var function_app_name = 'clock-dev-funcapp'
 var runtime_stack = 'DOTNETCORE|3.0'
 var guid = 'pid-634ee6d0-daae-4676-8dcf-20e9062d36de'
-var schema = '$schema: https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#'
 
 // deployment 
 resource deployment 'Microsoft.Resources/deployments@2020-06-01' = {
