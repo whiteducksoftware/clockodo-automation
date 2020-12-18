@@ -7,13 +7,6 @@
 </h1>
 
 <p align="center">
-  <a href="https://www.docker.com/">
-    <img src="https://img.shields.io/badge/docker%20-%230db7ed.svg?&style=for-the-badge&logo=docker&logoColor=white"
-         alt="Gitter">
-  </a>
-  <a href="https://www.terraform.io/">
-    <img src="https://img.shields.io/badge/terraform%20-%235835CC.svg?&style=for-the-badge&logo=terraform&logoColor=white">
-    </a>
   <a href="https://github.com/Azure/bicep">
     <img src="https://img.shields.io/static/v1?label=Azure-Bicep&message=v0.2.59&style=for-the-badge&logo&color=brightgreen">
   </a>
