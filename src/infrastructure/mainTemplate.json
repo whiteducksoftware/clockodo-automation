@@ -18,7 +18,7 @@
       "type": "string",
       "defaultValue": "westeurope"
     },
-    "blob_sku": {
+    "storage_sku": {
       "type": "string",
       "defaultValue": "Standard_LRS"
     },
@@ -33,10 +33,10 @@
   },
   "functions": [],
   "variables": {
+    "stac_name": "clock0dev0stac",
     "function_app_name": "clock-dev-funcapp",
-    "runtime_stack": "DOTNETCORE|3.0",
-    "guid": "pid-634ee6d0-daae-4676-8dcf-20e9062d36de",
-    "schema": "$schema: https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#"
+    "app_insights_name": "clock-dev-appinsights",
+    "guid": "pid-634ee6d0-daae-4676-8dcf-20e9062d36de"
   },
   "resources": [
     {
@@ -91,35 +91,22 @@
       },
       "tags": {
         "environment": "[parameters('environment')]"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('function_app_name'))]"
+      ]
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2019-06-01",
-      "name": "clock0dev0stac",
+      "name": "[variables('stac_name')]",
       "location": "[parameters('location')]",
-      "kind": "BlobStorage",
+      "kind": "StorageV2",
       "sku": {
-        "name": "[parameters('blob_sku')]"
+        "name": "[parameters('storage_sku')]"
       },
       "properties": {
         "accessTier": "Cool"
-      },
-      "tags": {
-        "environment": "[parameters('environment')]"
-      }
-    },
-    {
-      "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2020-06-01",
-      "name": "clock-dev-asp",
-      "location": "[parameters('location')]",
-      "kind": "linux",
-      "sku": {
-        "name": "[parameters('asp_sku')]"
-      },
-      "properties": {
-        "reserved": true
       },
       "tags": {
         "environment": "[parameters('environment')]"
@@ -135,50 +122,54 @@
       },
       "kind": "functionapp",
       "properties": {
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'clock-dev-asp')]",
         "siteConfig": {
-          "linuxFxVersion": "[variables('runtime_stack')]"
+          "appSettings": [
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('stac_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('stac_name')), '2019-06-01').keys[0].value)]"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', variables('app_insights_name')), '2015-05-01').InstrumentationKey]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~3"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "dotnet"
+            },
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('stac_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('stac_name')), '2019-06-01').keys[0].value)]"
+            },
+            {
+              "name": "WEBSITE_CONTENTSHARE",
+              "value": "[toLower(variables('function_app_name'))]"
+            }
+          ]
         }
       },
       "identity": {
         "type": "SystemAssigned"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', 'clock-dev-asp')]",
-        "[resourceId('Microsoft.Storage/storageAccounts', 'clock0dev0stac')]"
+        "[resourceId('Microsoft.Insights/components', variables('app_insights_name'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('stac_name'))]"
       ]
     },
     {
       "type": "Microsoft.Insights/components",
-      "apiVersion": "2020-02-02-preview",
-      "name": "clock-dev-appinsights",
+      "apiVersion": "2015-05-01",
+      "name": "[variables('app_insights_name')]",
       "location": "[parameters('location')]",
       "kind": "web",
       "tags": {
         "environment": "[parameters('environment')]"
       },
       "properties": {
-        "Flow_Type": "Bluefield",
-        "Application_Type": "web",
-        "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', 'clock-dev-analytics')]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.OperationalInsights/workspaces', 'clock-dev-analytics')]"
-      ]
-    },
-    {
-      "type": "Microsoft.OperationalInsights/workspaces",
-      "apiVersion": "2020-08-01",
-      "name": "clock-dev-analytics",
-      "location": "[parameters('location')]",
-      "properties": {
-        "sku": {
-          "name": "PerGB2018"
-        },
-        "retentionInDays": "[parameters('retention_days')]"
-      },
-      "tags": {
-        "environment": "[parameters('environment')]"
+        "Application_Type": "web"
       }
     }
   ]
