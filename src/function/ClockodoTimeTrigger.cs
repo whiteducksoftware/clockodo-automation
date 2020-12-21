@@ -15,8 +15,11 @@ namespace Company.Function
         private static HttpClient httpClient = new HttpClient();
 
         [FunctionName("ClockodoTimeTrigger")]
-        public async Task Run([TimerTrigger("5 */0 * * * *")] TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("1 */0 * * * *")] TimerInfo myTimer, ILogger log)
         {
+
+            var name = GetEnvironmentVariable("FUNCTIONS_EXTENSION_VERSION");
+
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
             var kv = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
             string secretName = (await kv.GetSecretAsync("https://clock-dev-akv.vault.azure.net/", "secretName")).Value;
@@ -27,7 +30,13 @@ namespace Company.Function
 
             var httpResponse = await httpClient.GetAsync("https://my.clockodo.com/api/clock");
 
-            log.LogInformation($"Status Code: {httpResponse.StatusCode} Data: {await httpResponse.Content.ReadAsStringAsync()}");
+            log.LogInformation($"Status Code: {httpResponse.StatusCode} Data: {await httpResponse.Content.ReadAsStringAsync()} Name {name}");
+        }
+
+        public static string GetEnvironmentVariable(string name)
+        {
+            return name + ": " +
+                System.Environment.GetEnvironmentVariable(name, EnvironmentVariableTarget.Process);
         }
     }
 }
