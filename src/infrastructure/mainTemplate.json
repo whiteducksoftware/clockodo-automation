@@ -33,6 +33,7 @@
   },
   "functions": [],
   "variables": {
+    "stac_name": "clock0dev0stac",
     "function_app_name": "clock-dev-funcapp",
     "app_insights_name": "clock-dev-appinsights",
     "guid": "pid-634ee6d0-daae-4676-8dcf-20e9062d36de"
@@ -98,7 +99,7 @@
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2019-06-01",
-      "name": "clock0dev0stac",
+      "name": "[variables('stac_name')]",
       "location": "[parameters('location')]",
       "kind": "StorageV2",
       "sku": {
@@ -119,14 +120,13 @@
       "tags": {
         "environment": "[parameters('environment')]"
       },
-      "kind": "functionapp,linux",
+      "kind": "functionapp",
       "properties": {
-        "reserved": true,
         "siteConfig": {
           "appSettings": [
             {
               "name": "AzureWebJobsStorage",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', 'clock0dev0stac', ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', 'clock0dev0stac'), '2019-06-01').keys[0].value)]"
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('stac_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('stac_name')), '2019-06-01').keys[0].value)]"
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -134,11 +134,19 @@
             },
             {
               "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~1"
+              "value": "~3"
             },
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
               "value": "dotnet"
+            },
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('stac_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('stac_name')), '2019-06-01').keys[0].value)]"
+            },
+            {
+              "name": "WEBSITE_CONTENTSHARE",
+              "value": "[toLower(variables('function_app_name'))]"
             }
           ]
         }
@@ -148,7 +156,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Insights/components', variables('app_insights_name'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', 'clock0dev0stac')]"
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('stac_name'))]"
       ]
     },
     {

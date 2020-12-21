@@ -6,6 +6,7 @@ param storage_sku string = 'Standard_LRS'
 param asp_sku string = 'B1'
 param retention_days int = 30
 
+var stac_name = 'clock0dev0stac'
 var function_app_name = 'clock-dev-funcapp'
 var app_insights_name = 'clock-dev-appinsights'
 var guid = 'pid-634ee6d0-daae-4676-8dcf-20e9062d36de'
@@ -69,7 +70,7 @@ resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
 
 // storage account
 resource stac 'Microsoft.Storage/storageAccounts@2019-06-01' = {
-  name: 'clock0dev0stac'
+  name: stac_name
   location: location
   kind: 'StorageV2'
   sku: {
@@ -90,18 +91,17 @@ resource function_app 'Microsoft.Web/sites@2020-06-01' = {
   tags: {
     environment: environment
   }
-  kind: 'functionapp,linux'
+  kind: 'functionapp'
   dependsOn: [
     stac
     app_insights
   ]
   properties: {
-    reserved: true
     siteConfig: {
       appSettings: [
         {
           name: 'AzureWebJobsStorage'
-          value: concat('DefaultEndpointsProtocol=https;AccountName=', stac.name, ';AccountKey=', listKeys(stac.id,'2019-06-01').keys[0].value)
+          value: concat('DefaultEndpointsProtocol=https;AccountName=', stac_name, ';AccountKey=', listKeys(stac.id,'2019-06-01').keys[0].value)
         }
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
@@ -109,11 +109,19 @@ resource function_app 'Microsoft.Web/sites@2020-06-01' = {
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~1'
+          value: '~3'
         }
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: 'dotnet'
+        }
+        {
+          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+          value: concat('DefaultEndpointsProtocol=https;AccountName=', stac_name, ';AccountKey=', listKeys(stac.id,'2019-06-01').keys[0].value)
+        }
+        {
+          name: 'WEBSITE_CONTENTSHARE'
+          value: toLower(function_app_name)
         }
       ]
     }
