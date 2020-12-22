@@ -1,6 +1,6 @@
 {
     "id": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "$schema": "src/ci/schema",
+    "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Template",
     "description": "An Azure deployment template",
     "type": "object",
