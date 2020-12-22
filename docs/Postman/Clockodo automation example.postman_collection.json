@@ -81,8 +81,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Projcets",
@@ -124,8 +123,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Services",
@@ -215,8 +213,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Entries",
@@ -242,7 +239,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://my.clockodo.com/api/entries?time_since=2017-01-01%2000:00:00&time_until=2017-02-01%2000:00:00",
+							"raw": "https://my.clockodo.com/api/entries?time_since=2017-01-01 00:00:00&time_until=2020-12-14 00:00:00",
 							"protocol": "https",
 							"host": [
 								"my",
@@ -256,11 +253,11 @@
 							"query": [
 								{
 									"key": "time_since",
-									"value": "2017-01-01%2000:00:00"
+									"value": "2017-01-01 00:00:00"
 								},
 								{
 									"key": "time_until",
-									"value": "2017-02-01%2000:00:00"
+									"value": "2020-12-14 00:00:00"
 								}
 							]
 						}
@@ -268,7 +265,7 @@
 					"response": []
 				},
 				{
-					"name": "Get all entries with optionale parameter",
+					"name": "Get all with optionale parameter",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -288,7 +285,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://my.clockodo.com/api/entries?time_since=2017-01-01%2000:00:00&time_until=2017-02-01%2000:00:00&filter[projects_id]=1228137",
+							"raw": "https://my.clockodo.com/api/entries?time_since=2017-01-01 00:00:00&time_until=2020-12-14 00:00:00&filter[projects_id]=1228137",
 							"protocol": "https",
 							"host": [
 								"my",
@@ -302,11 +299,11 @@
 							"query": [
 								{
 									"key": "time_since",
-									"value": "2017-01-01%2000:00:00"
+									"value": "2017-01-01 00:00:00"
 								},
 								{
 									"key": "time_until",
-									"value": "2017-02-01%2000:00:00"
+									"value": "2020-12-14 00:00:00"
 								},
 								{
 									"key": "filter[projects_id]",
@@ -317,8 +314,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Tasks",
@@ -387,8 +383,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Entrygroup",
@@ -453,9 +448,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
