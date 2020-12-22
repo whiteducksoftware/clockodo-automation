@@ -1,19 +1,18 @@
-param tenant string = ''
-param service_principal string = ''
-param environment string = 'dev'
-param location string = 'westeurope'
-param storage_sku string = 'Standard_LRS'
-param asp_sku string = 'B1'
-param retention_days int = 30
+param resource_prefix string = 'clockautom'
 
-var stac_name = 'clock0dev0stac'
-var function_app_name = 'clock-dev-funcapp'
-var app_insights_name = 'clock-dev-appinsights'
-var guid = 'pid-634ee6d0-daae-4676-8dcf-20e9062d36de'
+var stac_name = concat(resource_prefix, uniqueString(resourceGroup().id))
+var function_app_name = concat(resource_prefix, '-funcapp')
+var app_insights_name = concat(resource_prefix, '-appinsights')
+var akv_name = concat(resource_prefix, '-akv')
+var storage_sku = 'Standard_LRS'
+var asp_sku = 'B1'
+var retention_days = 30
+var location = resourceGroup().location
+var tenant = subscription().tenantId
 
 // deployment 
 resource deployment 'Microsoft.Resources/deployments@2020-06-01' = {
-  name: guid
+  name: 'pid-634ee6d0-daae-4676-8dcf-20e9062d36de'
   properties: {
     mode: 'Incremental'
     template: {
@@ -26,7 +25,7 @@ resource deployment 'Microsoft.Resources/deployments@2020-06-01' = {
 
 // keyvault
 resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
-  name: 'clock-dev-akv'
+  name: akv_name
   location: location
   properties: {
     tenantId: tenant
@@ -36,17 +35,6 @@ resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
       family: 'A'
     }
     accessPolicies: [
-      {
-        tenantId: tenant
-        objectId: service_principal
-        permissions: {
-          secrets: [
-            'get'
-            'list'
-            'set'
-          ]
-        }
-      }
       {
         tenantId: tenant
         objectId: reference(function_app.id, '2020-06-01', 'Full').identity.principalId
@@ -63,9 +51,6 @@ resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
   dependsOn: [
     function_app
   ]
-  tags: {
-    environment: environment
-  }
 }
 
 // storage account
@@ -79,18 +64,12 @@ resource stac 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   properties: {
     accessTier: 'Cool'
   }
-  tags: {
-    environment: environment 
-  }
 }
 
 // function app
 resource function_app 'Microsoft.Web/sites@2020-06-01' = {
   name: function_app_name
   location: location
-  tags: {
-    environment: environment
-  }
   kind: 'functionapp'
   dependsOn: [
     stac
@@ -123,6 +102,10 @@ resource function_app 'Microsoft.Web/sites@2020-06-01' = {
           name: 'WEBSITE_CONTENTSHARE'
           value: toLower(function_app_name)
         }
+        {
+          name: 'KEYVAULT_NAME'
+          value: akv_name
+        }
       ]
     }
   }
@@ -136,9 +119,6 @@ resource app_insights 'microsoft.insights/components@2015-05-01' = {
   name: app_insights_name
   location: location
   kind: 'web'
-  tags: {
-    environment: environment
-  }
   properties: {
     Application_Type: 'web'
   }
