@@ -18,25 +18,24 @@ namespace Company.Function
         public async Task Run([TimerTrigger("1 */0 * * * *")] TimerInfo myTimer, ILogger log)
         {
 
-            var name = GetEnvironmentVariable("FUNCTIONS_EXTENSION_VERSION");
+            var keyvaultName = GetEnvironmentVariable("KEYVAULT_NAME");
 
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
             var kv = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
-            string secretName = (await kv.GetSecretAsync("https://clock-dev-akv.vault.azure.net/", "secretName")).Value;
-            string secretKey = (await kv.GetSecretAsync("https://clock-dev-akv.vault.azure.net/", "secretKey")).Value;
+            string secretName = (await kv.GetSecretAsync($"{keyvaultName}", "secretName")).Value;
+            string secretKey = (await kv.GetSecretAsync($"{keyvaultName}", "secretKey")).Value;
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
             Convert.ToBase64String(Encoding.UTF8.GetBytes($"{secretName}:{secretKey}")));
 
             var httpResponse = await httpClient.GetAsync("https://my.clockodo.com/api/clock");
 
-            log.LogInformation($"Status Code: {httpResponse.StatusCode} Data: {await httpResponse.Content.ReadAsStringAsync()} Name {name}");
+            log.LogInformation($"Status Code: {httpResponse.StatusCode} Data: {await httpResponse.Content.ReadAsStringAsync()}");
         }
 
-        public static string GetEnvironmentVariable(string name)
+        public static string GetEnvironmentVariable(string keyvaultName)
         {
-            return name + ": " +
-                System.Environment.GetEnvironmentVariable(name, EnvironmentVariableTarget.Process);
+            return System.Environment.GetEnvironmentVariable(keyvaultName, EnvironmentVariableTarget.Process);
         }
     }
 }
