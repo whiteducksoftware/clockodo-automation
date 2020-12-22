@@ -2,47 +2,28 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "tenant": {
+    "resource_prefix": {
       "type": "string",
-      "defaultValue": ""
-    },
-    "service_principal": {
-      "type": "string",
-      "defaultValue": ""
-    },
-    "environment": {
-      "type": "string",
-      "defaultValue": "dev"
-    },
-    "location": {
-      "type": "string",
-      "defaultValue": "westeurope"
-    },
-    "storage_sku": {
-      "type": "string",
-      "defaultValue": "Standard_LRS"
-    },
-    "asp_sku": {
-      "type": "string",
-      "defaultValue": "B1"
-    },
-    "retention_days": {
-      "type": "int",
-      "defaultValue": 30
+      "defaultValue": "clockautom"
     }
   },
   "functions": [],
   "variables": {
-    "stac_name": "clock0dev0stac",
-    "function_app_name": "clock-dev-funcapp",
-    "app_insights_name": "clock-dev-appinsights",
-    "guid": "pid-634ee6d0-daae-4676-8dcf-20e9062d36de"
+    "stac_name": "[concat(parameters('resource_prefix'), uniqueString(resourceGroup().id))]",
+    "function_app_name": "[concat(parameters('resource_prefix'), '-funcapp')]",
+    "app_insights_name": "[concat(parameters('resource_prefix'), '-appinsights')]",
+    "akv_name": "[concat(parameters('resource_prefix'), '-akv')]",
+    "storage_sku": "Standard_LRS",
+    "asp_sku": "B1",
+    "retention_days": 30,
+    "location": "[resourceGroup().location]",
+    "tenant": "[subscription().tenantId]"
   },
   "resources": [
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2020-06-01",
-      "name": "[variables('guid')]",
+      "name": "pid-634ee6d0-daae-4676-8dcf-20e9062d36de",
       "properties": {
         "mode": "Incremental",
         "template": {
@@ -55,10 +36,10 @@
     {
       "type": "Microsoft.KeyVault/vaults",
       "apiVersion": "2019-09-01",
-      "name": "clock-dev-akv",
-      "location": "[parameters('location')]",
+      "name": "[variables('akv_name')]",
+      "location": "[variables('location')]",
       "properties": {
-        "tenantId": "[parameters('tenant')]",
+        "tenantId": "[variables('tenant')]",
         "softDeleteRetentionInDays": 60,
         "sku": {
           "name": "standard",
@@ -66,18 +47,7 @@
         },
         "accessPolicies": [
           {
-            "tenantId": "[parameters('tenant')]",
-            "objectId": "[parameters('service_principal')]",
-            "permissions": {
-              "secrets": [
-                "get",
-                "list",
-                "set"
-              ]
-            }
-          },
-          {
-            "tenantId": "[parameters('tenant')]",
+            "tenantId": "[variables('tenant')]",
             "objectId": "[reference(resourceId('Microsoft.Web/sites', variables('function_app_name')), '2020-06-01', 'Full').identity.principalId]",
             "permissions": {
               "secrets": [
@@ -89,9 +59,6 @@
           }
         ]
       },
-      "tags": {
-        "environment": "[parameters('environment')]"
-      },
       "dependsOn": [
         "[resourceId('Microsoft.Web/sites', variables('function_app_name'))]"
       ]
@@ -100,26 +67,20 @@
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2019-06-01",
       "name": "[variables('stac_name')]",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "kind": "StorageV2",
       "sku": {
-        "name": "[parameters('storage_sku')]"
+        "name": "[variables('storage_sku')]"
       },
       "properties": {
         "accessTier": "Cool"
-      },
-      "tags": {
-        "environment": "[parameters('environment')]"
       }
     },
     {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2020-06-01",
       "name": "[variables('function_app_name')]",
-      "location": "[parameters('location')]",
-      "tags": {
-        "environment": "[parameters('environment')]"
-      },
+      "location": "[variables('location')]",
       "kind": "functionapp",
       "properties": {
         "siteConfig": {
@@ -147,6 +108,10 @@
             {
               "name": "WEBSITE_CONTENTSHARE",
               "value": "[toLower(variables('function_app_name'))]"
+            },
+            {
+              "name": "KEYVAULT_NAME",
+              "value": "[variables('akv_name')]"
             }
           ]
         }
@@ -163,11 +128,8 @@
       "type": "Microsoft.Insights/components",
       "apiVersion": "2015-05-01",
       "name": "[variables('app_insights_name')]",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "kind": "web",
-      "tags": {
-        "environment": "[parameters('environment')]"
-      },
       "properties": {
         "Application_Type": "web"
       }
