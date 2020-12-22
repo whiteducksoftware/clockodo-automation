@@ -17,7 +17,6 @@ namespace Company.Function
         [FunctionName("ClockodoTimeTrigger")]
         public async Task Run([TimerTrigger("1 */0 * * * *")] TimerInfo myTimer, ILogger log)
         {
-
             var name = GetEnvironmentVariable("FUNCTIONS_EXTENSION_VERSION");
 
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
