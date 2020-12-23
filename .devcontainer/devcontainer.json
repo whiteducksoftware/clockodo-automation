@@ -16,6 +16,8 @@
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"ms-azuretools.vscode-bicep",
+		"ms-dotnettools.csharp",
+		"ms-azuretools.vscode-azurefunctions",
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

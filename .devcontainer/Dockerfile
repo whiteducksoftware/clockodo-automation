@@ -47,6 +47,7 @@ RUN apt-get update \
     powershell \
     azure-cli \
     nodejs yarn \
+    azure-functions-core-tools-3 \
   \
   # Install npm dependencies
   && yarn global add @angular/cli \
