@@ -1,4 +1,4 @@
-name: Validate PR
+name: validate_PR
 on: pull_request
 jobs:
   validate_bicep_build:
@@ -10,8 +10,8 @@ jobs:
         with:
           files: src/infrastructure/mainTemplate.bicep
       - name: Run ARM TTK
-          uses: aliencube/arm-ttk-actions@v0.3
-          id: armtest
-          with:
-            path: src/infrastructure
-      
+        uses: aliencube/arm-ttk-actions@v0.3
+        id: armtest
+        with:
+          path: src/infrastructure
+    
