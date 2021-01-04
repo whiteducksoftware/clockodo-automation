@@ -12,6 +12,6 @@ jobs:
       - name: Validate JSON
         uses: docker://orrosenblatt/validate-json-action:latest
         env:
-          INPUT_SCHEMA: src/ci/deploymentTemplate.json
+          INPUT_SCHEMA: https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#
           INPUT_JSONS: src/infrastructure/mainTemplate.json
       
