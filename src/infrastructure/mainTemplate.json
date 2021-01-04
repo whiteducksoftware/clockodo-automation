@@ -124,7 +124,7 @@
     },
     {
       "type": "Microsoft.Insights/components",
-      "apiVersion": "2015-05-01",
+      "apiVersion": "2018-05-01-preview",
       "name": "[variables('app_insights_name')]",
       "location": "[variables('location')]",
       "kind": "web",
