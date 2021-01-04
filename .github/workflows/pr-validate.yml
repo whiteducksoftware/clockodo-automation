@@ -9,9 +9,9 @@ jobs:
         uses: aliencube/bicep-build-actions@v0.1
         with:
           files: src/infrastructure/mainTemplate.bicep
-      - name: Validate JSON
-        uses: docker://orrosenblatt/validate-json-action:latest
-        env:
-          INPUT_SCHEMA: https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#
-          INPUT_JSONS: src/infrastructure/mainTemplate.json
+      - name: Run ARM TTK
+          uses: aliencube/arm-ttk-actions@v0.3
+          id: armtest
+          with:
+            path: src/infrastructure
       
