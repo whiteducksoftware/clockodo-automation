@@ -1,4 +1,4 @@
-name: validate_PR
+name: validate-PR
 on: pull_request
 jobs:
   validate_bicep_build:
