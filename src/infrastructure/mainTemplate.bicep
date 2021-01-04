@@ -113,7 +113,7 @@ resource function_app 'Microsoft.Web/sites@2020-06-01' = {
 }
 
 // application insights
-resource app_insights 'microsoft.insights/components@2018-05-01-preview' = {
+resource app_insights 'microsoft.insights/components@2015-05-01' = {
   name: app_insights_name
   location: location
   kind: 'web'
