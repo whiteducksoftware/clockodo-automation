@@ -14,8 +14,6 @@
     "app_insights_name": "[concat(parameters('resource_prefix'), '-appinsights')]",
     "akv_name": "[concat(parameters('resource_prefix'), '-akv')]",
     "storage_sku": "Standard_LRS",
-    "asp_sku": "B1",
-    "retention_days": 30,
     "location": "[resourceGroup().location]",
     "tenant": "[subscription().tenantId]"
   },
