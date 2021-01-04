@@ -14,9 +14,4 @@ jobs:
         id: armtest
         with:
           path: src/infrastructure
-      - name: Show ARM TTK test result
-        shell: bash
-        continue-on-error: true
-        run: |
-          echo 'Results: ${{ toJSON(fromJSON(steps.armtest.outputs.results)) }}'  
   
