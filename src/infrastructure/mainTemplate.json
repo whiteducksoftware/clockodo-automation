@@ -14,8 +14,6 @@
     "app_insights_name": "[concat(parameters('resource_prefix'), '-appinsights')]",
     "akv_name": "[concat(parameters('resource_prefix'), '-akv')]",
     "storage_sku": "Standard_LRS",
-    "asp_sku": "B1",
-    "retention_days": 30,
     "location": "[resourceGroup().location]",
     "tenant": "[subscription().tenantId]"
   },
@@ -126,7 +124,7 @@
     },
     {
       "type": "Microsoft.Insights/components",
-      "apiVersion": "2015-05-01",
+      "apiVersion": "2018-05-01-preview",
       "name": "[variables('app_insights_name')]",
       "location": "[variables('location')]",
       "kind": "web",

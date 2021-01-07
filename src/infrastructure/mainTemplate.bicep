@@ -5,8 +5,6 @@ var function_app_name = concat(resource_prefix, '-funcapp')
 var app_insights_name = concat(resource_prefix, '-appinsights')
 var akv_name = concat(resource_prefix, '-akv')
 var storage_sku = 'Standard_LRS'
-var asp_sku = 'B1'
-var retention_days = 30
 var location = resourceGroup().location
 var tenant = subscription().tenantId
 

@@ -1,0 +1,17 @@
+name: validate-PR
+on: pull_request
+jobs:
+  validate_bicep_build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Run Bicep build
+        uses: aliencube/bicep-build-actions@v0.1
+        with:
+          files: src/infrastructure/mainTemplate.bicep
+      - name: Run ARM TTK
+        uses: aliencube/arm-ttk-actions@v0.3
+        id: armtest
+        with:
+          path: src/infrastructure
+  
