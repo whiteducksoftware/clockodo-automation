@@ -8,7 +8,10 @@ using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 using TimeTriggerClock.models;
+using Azure.Storage.Blobs;
 
 namespace TimeTriggerClock.function
 {
@@ -34,6 +37,19 @@ namespace TimeTriggerClock.function
             var content = await httpResponse.Content.ReadAsStringAsync();
 
             var tasks = JsonSerializer.Deserialize<EntrieModel.Rootobject>(content);
+
+            /*
+            var account = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=clockautombbzew2te7qhdg;AccountKey=p+1V5ID0uMQ0nwcee+uloOs2dcM7sB/P8qloRoNMX2XyK8AKkJte9+B8JKyXXoTTbZigMCc7/TiWuJD2u2qykg==;EndpointSuffix=core.windows.net");
+            var storageClient = account.CreateCloudTableClient();
+            var table = storageClient.GetTableReference("TestData");  
+            TableOperation insertOperation = TableOperation.Insert(new EntrieModel());
+            */
+            
+            var connectionString = "DefaultEndpointsProtocol=https;AccountName=clockautombbzew2te7qhdg;AccountKey=p+1V5ID0uMQ0nwcee+uloOs2dcM7sB/P8qloRoNMX2XyK8AKkJte9+B8JKyXXoTTbZigMCc7/TiWuJD2u2qykg==;EndpointSuffix=core.windows.net";
+            var containerName = "test";
+            BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
+            BlobClient blob = container.GetBlobClient("TestblobName");
+            blob.Upload(content);
 
             log.LogInformation($"Status Code: {httpResponse.StatusCode} Data: {await httpResponse.Content.ReadAsStringAsync()}");
 

@@ -1,7 +1,13 @@
+using Microsoft.WindowsAzure.Storage.Table;
+
 namespace TimeTriggerClock.models
 {
-    public class EntrieModel
+    public class EntrieModel : TableEntity  
     {
+        public EntrieModel (){
+            this.PartitionKey = "Test";
+        }
+
         public class Rootobject
         {
             public Paging paging { get; set; }
