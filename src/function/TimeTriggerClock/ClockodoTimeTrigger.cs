@@ -43,21 +43,20 @@ namespace TimeTriggerClock.function
             var storageClient = account.CreateCloudTableClient();
             var table = storageClient.GetTableReference("TestData");  
             TableOperation insertOperation = TableOperation.Insert(new EntrieModel());
-            */
-            
+        
             var connectionString = "DefaultEndpointsProtocol=https;AccountName=clockautombbzew2te7qhdg;AccountKey=p+1V5ID0uMQ0nwcee+uloOs2dcM7sB/P8qloRoNMX2XyK8AKkJte9+B8JKyXXoTTbZigMCc7/TiWuJD2u2qykg==;EndpointSuffix=core.windows.net";
             var containerName = "test";
             BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
             BlobClient blob = container.GetBlobClient("TestblobName");
             blob.Upload(content);
-
+            */
+            
             log.LogInformation($"Status Code: {httpResponse.StatusCode} Data: {await httpResponse.Content.ReadAsStringAsync()}");
-
         }
 
-        public static string GetEnvironmentVariable(string keyvaultName)
+        public static string GetEnvironmentVariable(string environmentVariable)
         {
-            return System.Environment.GetEnvironmentVariable(keyvaultName, EnvironmentVariableTarget.Process);
+            return System.Environment.GetEnvironmentVariable(environmentVariable, EnvironmentVariableTarget.Process);
         }
     }
 }
