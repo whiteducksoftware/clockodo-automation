@@ -1,13 +1,7 @@
-using Microsoft.WindowsAzure.Storage.Table;
-
-namespace TimeTriggerClock.models
+namespace function.models
 {
-    public class EntrieModel : TableEntity  
+    public class EntryModel
     {
-        public EntrieModel (){
-            this.PartitionKey = "Test";
-        }
-
         public class Rootobject
         {
             public Paging paging { get; set; }
@@ -29,7 +23,7 @@ namespace TimeTriggerClock.models
             public int users_id { get; set; }
             public int projects_id { get; set; }
             public int customers_id { get; set; }
-            public int services_id { get; set; }
+            public int? services_id { get; set; }
             public int hourly_rate { get; set; }
             public int billable { get; set; }
             public string time_insert { get; set; }
@@ -44,7 +38,7 @@ namespace TimeTriggerClock.models
             public object lumpSums_id { get; set; }
             public string time_clocked_since { get; set; }
             public bool offline { get; set; }
-            public int revenue { get; set; }
+            public float revenue { get; set; }
             public bool budget_is_hours { get; set; }
             public bool budget_is_not_strict { get; set; }
             public string customers_name { get; set; }
@@ -56,7 +50,7 @@ namespace TimeTriggerClock.models
             public object lumpSums_name { get; set; }
             public object lumpSums_amount { get; set; }
             public bool billed { get; set; }
-            public int texts_id { get; set; }
+            public int? texts_id { get; set; }
             public string text { get; set; }
             public string duration_time { get; set; }
             public string offset_time { get; set; }
