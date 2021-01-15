@@ -1,6 +1,7 @@
 param resource_prefix string = 'clockautom'
 
 var stac_name = concat(resource_prefix, uniqueString(resourceGroup().id))
+var backup_container = 'backups'
 var function_app_name = concat(resource_prefix, '-funcapp')
 var app_insights_name = concat(resource_prefix, '-appinsights')
 var akv_name = concat(resource_prefix, '-akv')
@@ -64,6 +65,17 @@ resource stac 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   }
 }
 
+// blob container
+resource blob_container 'Microsoft.Storage/storageAccounts/blobServices/containers@2019-06-01' = {
+  name: concat(stac.name, '/default/', backup_container)
+  properties: {
+    publicAccess: 'None'
+  }
+  dependsOn: [
+    stac
+  ]
+}
+
 // function app
 resource function_app 'Microsoft.Web/sites@2020-06-01' = {
   name: function_app_name
@@ -103,6 +115,10 @@ resource function_app 'Microsoft.Web/sites@2020-06-01' = {
         {
           name: 'KEYVAULT_NAME'
           value: akv_name
+        }
+        {
+          name: 'CONTAINER_NAME'
+          value: backup_container
         }
       ]
     }
