@@ -10,6 +10,7 @@
   "functions": [],
   "variables": {
     "stac_name": "[concat(parameters('resource_prefix'), uniqueString(resourceGroup().id))]",
+    "backup_container": "backups",
     "function_app_name": "[concat(parameters('resource_prefix'), '-funcapp')]",
     "app_insights_name": "[concat(parameters('resource_prefix'), '-appinsights')]",
     "akv_name": "[concat(parameters('resource_prefix'), '-akv')]",
@@ -75,6 +76,17 @@
       }
     },
     {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2019-06-01",
+      "name": "[concat(variables('stac_name'), '/default/', variables('backup_container'))]",
+      "properties": {
+        "publicAccess": "None"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('stac_name'))]"
+      ]
+    },
+    {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2020-06-01",
       "name": "[variables('function_app_name')]",
@@ -110,6 +122,10 @@
             {
               "name": "KEYVAULT_NAME",
               "value": "[variables('akv_name')]"
+            },
+            {
+              "name": "CONTAINER_NAME",
+              "value": "[variables('backup_container')]"
             }
           ]
         }
@@ -124,7 +140,7 @@
     },
     {
       "type": "Microsoft.Insights/components",
-      "apiVersion": "2018-05-01-preview",
+      "apiVersion": "2015-05-01",
       "name": "[variables('app_insights_name')]",
       "location": "[variables('location')]",
       "kind": "web",
