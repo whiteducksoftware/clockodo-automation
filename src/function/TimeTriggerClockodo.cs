@@ -37,8 +37,8 @@ namespace function
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
             Convert.ToBase64String(Encoding.UTF8.GetBytes($"{secretName}:{secretKey}")));
 
-            var httpResponse = await httpClient.GetAsync("https://my.clockodo.com/api/entries?time_since=2017-01-01 00:00:00&time_until=2021-01-14 00:00:00");
-
+            var httpResponse = await httpClient.GetAsync($"https://my.clockodo.com/api/entries?time_since=2017-01-01 00:00:00&time_until={localDate.ToString("yyyy'-'MM'-'dd HH:mm:ss")}");
+            
             var content = await httpResponse.Content.ReadAsStringAsync();
 
             var entryModel = JsonSerializer.Deserialize<EntryModel.Rootobject>(content);
