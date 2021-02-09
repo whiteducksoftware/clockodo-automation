@@ -1,9 +1,15 @@
 param resource_prefix string = 'clockautom'
 param clockodo_api_user string {
   secure: true
+  metadata: {
+    description: 'User for accessing the Clockodo API'
+  }
 }
 param clockodo_api_key string {
   secure: true
+  metadata: {
+    description: 'Key for accessing the Clockodo API'
+  }
 }
 
 var stac_name = concat(resource_prefix, uniqueString(resourceGroup().id))

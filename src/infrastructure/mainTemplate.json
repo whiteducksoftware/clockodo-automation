@@ -7,10 +7,16 @@
       "defaultValue": "clockautom"
     },
     "clockodo_api_user": {
-      "type": "secureString"
+      "type": "secureString",
+      "metadata": {
+        "description": "User for accessing the Clockodo API"
+      }
     },
     "clockodo_api_key": {
-      "type": "secureString"
+      "type": "secureString",
+      "metadata": {
+        "description": "Key for accessing the Clockodo API"
+      }
     }
   },
   "functions": [],
