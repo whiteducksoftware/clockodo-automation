@@ -21,36 +21,45 @@ namespace function
         private static HttpClient httpClient = new HttpClient();
 
         [FunctionName("TimeTriggerClockodo")]
-        public async Task Run([TimerTrigger("30 */0 * * * *")] TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("1 */0 * * * *")] TimerInfo myTimer, ILogger log)
         {
             var keyvaultName = GetEnvironmentVariable("KEYVAULT_NAME");
             var containerName = GetEnvironmentVariable("CONTAINER_NAME");
             var connectionString = GetEnvironmentVariable("AzureWebJobsStorage");
 
-            DateTime localDate = DateTime.Now;
+            var localDate = DateTime.Now;
 
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
             var kv = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
-            string secretName = (await kv.GetSecretAsync($"https://{keyvaultName}.vault.azure.net/", "secretName")).Value;
-            string secretKey = (await kv.GetSecretAsync($"https://{keyvaultName}.vault.azure.net/", "secretKey")).Value;
+            var ClockodoApiUser = (await kv.GetSecretAsync($"https://{keyvaultName}.vault.azure.net/", "ClockodoApiUser")).Value;
+            var ClockodoApiKey = (await kv.GetSecretAsync($"https://{keyvaultName}.vault.azure.net/", "ClockodoApiKey")).Value;
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-            Convert.ToBase64String(Encoding.UTF8.GetBytes($"{secretName}:{secretKey}")));
+            Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ClockodoApiUser}:{ClockodoApiKey}")));
 
-            var httpResponse = await httpClient.GetAsync($"https://my.clockodo.com/api/entries?time_since=2017-01-01 00:00:00&time_until={localDate.ToString("yyyy'-'MM'-'dd HH:mm:ss")}");
-            
+            var subDate = DateTime.Now.AddDays(-1).AddMonths(-1);
+
+            var httpResponse = await httpClient.GetAsync($"https://my.clockodo.com/api/entries?time_since={subDate.ToString("yyyy'-'MM'-'dd HH:mm:ss")}&time_until={localDate.ToString("yyyy'-'MM'-'dd HH:mm:ss")}");
             var content = await httpResponse.Content.ReadAsStringAsync();
 
             var entryModel = JsonSerializer.Deserialize<EntryModel.Rootobject>(content);
 
-            var client = new BlobContainerClient(connectionString, containerName);
-           
-            using (Stream stream = new MemoryStream(Encoding.UTF32.GetBytes(JsonToCsv(entryModel.entries, ","))))
-            {
-                await client.UploadBlobAsync($"{localDate.ToString("MMMM yyyy HH:mm:ss")}.csv", stream);
-            }
+            var client = new BlobContainerClient(connectionString, "backups");
 
-            //log.LogInformation($"Status Code: {httpResponse.StatusCode} Data: {await httpResponse.Content.ReadAsStringAsync()}");
+            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonToCsv(entryModel.entries, ","))))
+            {
+                var rand = new Random();
+                var name = ($"Daylybackup/{localDate.ToString($"MM-dd-yyyy-backup")}.csv");
+                if (!client.GetBlobClient(name).Exists())
+                {
+                    //await client.UploadBlobAsync($"{localDate.ToString($"MM-dd-yyyy-backup")}.csv", stream);
+                    await client.UploadBlobAsync($"{name}", stream);
+                }
+                else
+                {
+                    Console.WriteLine("Backup exists");
+                }
+            }
         }
 
         public static string GetEnvironmentVariable(string environmentVariable)
