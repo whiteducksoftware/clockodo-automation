@@ -1,4 +1,10 @@
 param resource_prefix string = 'clockautom'
+param clockodo_api_user string {
+  secure: true
+}
+param clockodo_api_key string {
+  secure: true
+}
 
 var stac_name = concat(resource_prefix, uniqueString(resourceGroup().id))
 var backup_container = 'backups'
@@ -8,6 +14,8 @@ var akv_name = concat(resource_prefix, '-akv')
 var storage_sku = 'Standard_LRS'
 var location = resourceGroup().location
 var tenant = subscription().tenantId
+var api_user = 'ClockodoApiUser'
+var api_key = 'ClockodoApiKey'
 
 // deployment 
 resource deployment 'Microsoft.Resources/deployments@2020-06-01' = {
@@ -49,6 +57,27 @@ resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
   }
   dependsOn: [
     function_app
+  ]
+}
+
+// akv secrets
+resource api_user_secret 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
+  name: concat(akv.name, '/', api_user)
+  properties: {
+    value: clockodo_api_user
+  }
+  dependsOn: [
+    akv
+  ]
+}
+
+resource api_key_secret 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
+  name: concat(akv.name, '/', api_key)
+  properties: {
+    value: clockodo_api_key
+  }
+  dependsOn: [
+    akv
   ]
 }
 

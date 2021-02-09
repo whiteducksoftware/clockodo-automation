@@ -5,6 +5,12 @@
     "resource_prefix": {
       "type": "string",
       "defaultValue": "clockautom"
+    },
+    "clockodo_api_user": {
+      "type": "secureString"
+    },
+    "clockodo_api_key": {
+      "type": "secureString"
     }
   },
   "functions": [],
@@ -16,7 +22,9 @@
     "akv_name": "[concat(parameters('resource_prefix'), '-akv')]",
     "storage_sku": "Standard_LRS",
     "location": "[resourceGroup().location]",
-    "tenant": "[subscription().tenantId]"
+    "tenant": "[subscription().tenantId]",
+    "api_user": "ClockodoApiUser",
+    "api_key": "ClockodoApiKey"
   },
   "resources": [
     {
@@ -60,6 +68,28 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Web/sites', variables('function_app_name'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2019-09-01",
+      "name": "[concat(variables('akv_name'), '/', variables('api_user'))]",
+      "properties": {
+        "value": "[parameters('clockodo_api_user')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', variables('akv_name'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2019-09-01",
+      "name": "[concat(variables('akv_name'), '/', variables('api_key'))]",
+      "properties": {
+        "value": "[parameters('clockodo_api_key')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', variables('akv_name'))]"
       ]
     },
     {
