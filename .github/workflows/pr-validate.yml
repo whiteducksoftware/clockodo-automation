@@ -5,11 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Build Bicep
-        uses: azure/CLI@v1
+      - name: Run Bicep build
+        uses: aliencube/bicep-build-actions@v0.1
         with:
-          inlineScript: |
-            az bicep build --files ./src/infrastructure/mainTemplate.bicep
+          files: src/infrastructure/mainTemplate.bicep
       - name: Run ARM TTK
         uses: aliencube/arm-ttk-actions@v0.3
         id: armtest
