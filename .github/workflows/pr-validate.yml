@@ -9,7 +9,7 @@ jobs:
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            az bicep build ./src/infrastructure/mainTemplate.bicep
+            az bicep build --files ./src/infrastructure/mainTemplate.bicep
       - name: Run ARM TTK
         uses: aliencube/arm-ttk-actions@v0.3
         id: armtest
