@@ -36,11 +36,6 @@ RUN apt-get update \
   && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - \
   && echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list \
   \
-  # install bicep
-  && curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64 \
-  && chmod +x ./bicep \
-  && mv ./bicep /usr/local/bin/bicep \
-  \
   && apt-get update \
   && apt install -y build-essential \
     dotnet-sdk-${DOTNET_VERSION} dotnet-runtime-${DOTNET_VERSION} aspnetcore-runtime-${DOTNET_VERSION} \
