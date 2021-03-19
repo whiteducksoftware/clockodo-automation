@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 using CsvHelper;
 using function.models;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Services.AppAuthentication;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace function
 {
@@ -31,11 +32,15 @@ namespace function
             var requestUri = QueryHelpers.AddQueryString("https://my.clockodo.com/api/entries",
                 new Dictionary<string, string>
                 {
-                    { "time_since", $"{dateTimeSince:yyyy'-'MM'-'dd HH:mm: ss}"},
-                    { "time_until", $"{dateTimeUntil:yyyy'-'MM'-'dd HH:mm: ss}" }
+                    { "time_since", $"{dateTimeSince:yyyy'-'MM'-'dd HH:mm:ss}"},
+                    { "time_until", $"{dateTimeUntil:yyyy'-'MM'-'dd HH:mm:ss}"}
                 });
 
-            var httpResponse = await httpClient.GetAsync(requestUri);
+            var strDecoded = requestUri;
+            strDecoded = WebUtility.HtmlDecode(strDecoded);
+            strDecoded = Uri.UnescapeDataString(strDecoded);
+
+            var httpResponse = await httpClient.GetAsync(strDecoded);
             var content = await httpResponse.Content.ReadAsStringAsync();
 
             var entryModel = JsonSerializer.Deserialize<EntryModel.Rootobject>(content);
@@ -47,7 +52,6 @@ namespace function
                 
                 if (!client.GetBlobClient(backupFileName).Exists())
                 {
-                    //await client.UploadBlobAsync($"{localDate.ToString($"MM-dd-yyyy-backup")}.csv", stream);
                     await client.UploadBlobAsync($"{backupFileName}", stream);
                 }
                 else
@@ -68,7 +72,6 @@ namespace function
                     csv.NextRecord();
                     csv.WriteRecords(tasks);
                 }
-
                 return writer.ToString();
             }
         }

@@ -11,7 +11,7 @@ namespace function
         private static readonly HttpClient HttpClient = new HttpClient();
 
         [FunctionName("TimeTriggerClockodo")]
-        public async Task Run([TimerTrigger("1 */0 * * * *")] TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("10 */0 * * * *")] TimerInfo myTimer, ILogger log)
         {
             var keyvaultName = GetEnvironmentVariable("KEYVAULT_NAME");
             var connectionString = GetEnvironmentVariable("AzureWebJobsStorage");
