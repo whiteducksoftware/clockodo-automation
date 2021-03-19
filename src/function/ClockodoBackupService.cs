@@ -37,7 +37,7 @@ namespace function
                 });
 
             var strDecoded = requestUri;
-            strDecoded = WebUtility.HtmlDecode(strDecoded);
+            strDecoded = WebUtility.UrlDecode(strDecoded);
             strDecoded = Uri.UnescapeDataString(strDecoded);
 
             var httpResponse = await httpClient.GetAsync(strDecoded);
