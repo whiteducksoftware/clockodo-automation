@@ -170,7 +170,7 @@ resource function_app1 'Microsoft.Web/sites@2020-06-01' = {
   }
 }
 
-// function app 1
+// function app 2
 resource function_app2 'Microsoft.Web/sites@2020-06-01' = {
   name: concat(function_app_name, '-2')
   location: location
