@@ -13,7 +13,8 @@ param clockodo_api_key string
 
 var stac_name = concat(resource_prefix, uniqueString(resourceGroup().id))
 var backup_container = 'backups'
-var function_app_name = concat(resource_prefix, '-funcapp')
+var function_app_day_name = concat(resource_prefix, '-funcapp-day')
+var function_app_month_name = concat(resource_prefix, '-funcapp-month')
 var app_insights_name = concat(resource_prefix, '-appinsights')
 var akv_name = concat(resource_prefix, '-akv')
 var storage_sku = 'Standard_LRS'
@@ -49,7 +50,7 @@ resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
     accessPolicies: [
       {
         tenantId: tenant
-        objectId: reference(function_app1.id, '2020-06-01', 'Full').identity.principalId
+        objectId: reference(function_app_day.id, '2020-06-01', 'Full').identity.principalId
         permissions: {
           secrets: [
             'get'
@@ -60,7 +61,7 @@ resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
       }
       {
         tenantId: tenant
-        objectId: reference(function_app2.id, '2020-06-01', 'Full').identity.principalId
+        objectId: reference(function_app_month.id, '2020-06-01', 'Full').identity.principalId
         permissions: {
           secrets: [
             'get'
@@ -118,9 +119,9 @@ resource blob_container 'Microsoft.Storage/storageAccounts/blobServices/containe
   ]
 }
 
-// function app 1
-resource function_app1 'Microsoft.Web/sites@2020-06-01' = {
-  name: concat(function_app_name, '-1')
+// function app day
+resource function_app_day 'Microsoft.Web/sites@2020-06-01' = {
+  name: function_app_day_name
   location: location
   kind: 'functionapp'
   dependsOn: [
@@ -152,7 +153,7 @@ resource function_app1 'Microsoft.Web/sites@2020-06-01' = {
         }
         {
           name: 'WEBSITE_CONTENTSHARE'
-          value: toLower(function_app_name)
+          value: toLower(function_app_day_name)
         }
         {
           name: 'KEYVAULT_NAME'
@@ -171,8 +172,8 @@ resource function_app1 'Microsoft.Web/sites@2020-06-01' = {
 }
 
 // function app 2
-resource function_app2 'Microsoft.Web/sites@2020-06-01' = {
-  name: concat(function_app_name, '-2')
+resource function_app_month 'Microsoft.Web/sites@2020-06-01' = {
+  name: function_app_month_name
   location: location
   kind: 'functionapp'
   dependsOn: [
@@ -204,7 +205,7 @@ resource function_app2 'Microsoft.Web/sites@2020-06-01' = {
         }
         {
           name: 'WEBSITE_CONTENTSHARE'
-          value: toLower(function_app_name)
+          value: toLower(function_app_month_name)
         }
         {
           name: 'KEYVAULT_NAME'
