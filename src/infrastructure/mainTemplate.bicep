@@ -1,16 +1,15 @@
 param resource_prefix string = 'clockautom'
-param clockodo_api_user string {
-  secure: true
-  metadata: {
-    description: 'User for accessing the Clockodo API'
-  }
-}
-param clockodo_api_key string {
-  secure: true
-  metadata: {
-    description: 'Key for accessing the Clockodo API'
-  }
-}
+
+@metadata({
+  description: 'User for accessing the Clockodo API'
+})
+param clockodo_api_user string 
+
+@secure()
+@metadata({
+  description: 'Key for accessing the Clockodo API'
+})
+param clockodo_api_key string
 
 var stac_name = concat(resource_prefix, uniqueString(resourceGroup().id))
 var backup_container = 'backups'
@@ -50,7 +49,7 @@ resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
     accessPolicies: [
       {
         tenantId: tenant
-        objectId: reference(function_app.id, '2020-06-01', 'Full').identity.principalId
+        objectId: reference(function_app1.id, '2020-06-01', 'Full').identity.principalId
         permissions: {
           secrets: [
             'get'
@@ -58,12 +57,20 @@ resource akv 'Microsoft.KeyVault/vaults@2019-09-01' = {
             'set'
           ]
         }
-      } 
+      }
+      {
+        tenantId: tenant
+        objectId: reference(function_app2.id, '2020-06-01', 'Full').identity.principalId
+        permissions: {
+          secrets: [
+            'get'
+            'list'
+            'set'
+          ]
+        }
+      }
     ]
   }
-  dependsOn: [
-    function_app
-  ]
 }
 
 // akv secrets
@@ -111,9 +118,61 @@ resource blob_container 'Microsoft.Storage/storageAccounts/blobServices/containe
   ]
 }
 
-// function app
-resource function_app 'Microsoft.Web/sites@2020-06-01' = {
-  name: function_app_name
+// function app 1
+resource function_app1 'Microsoft.Web/sites@2020-06-01' = {
+  name: concat(function_app_name, '-1')
+  location: location
+  kind: 'functionapp'
+  dependsOn: [
+    stac
+    app_insights
+  ]
+  properties: {
+    siteConfig: {
+      appSettings: [
+        {
+          name: 'AzureWebJobsStorage'
+          value: concat('DefaultEndpointsProtocol=https;AccountName=', stac_name, ';AccountKey=', listKeys(stac.id,'2019-06-01').keys[0].value)
+        }
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: reference(app_insights.id, '2015-05-01').InstrumentationKey
+        }
+        {
+          name: 'FUNCTIONS_EXTENSION_VERSION'
+          value: '~3'
+        }
+        {
+          name: 'FUNCTIONS_WORKER_RUNTIME'
+          value: 'dotnet'
+        }
+        {
+          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+          value: concat('DefaultEndpointsProtocol=https;AccountName=', stac_name, ';AccountKey=', listKeys(stac.id,'2019-06-01').keys[0].value)
+        }
+        {
+          name: 'WEBSITE_CONTENTSHARE'
+          value: toLower(function_app_name)
+        }
+        {
+          name: 'KEYVAULT_NAME'
+          value: akv_name
+        }
+        {
+          name: 'CONTAINER_NAME'
+          value: backup_container
+        }
+      ]
+    }
+  }
+  identity: {
+    type: 'SystemAssigned'
+  }
+}
+
+// function app 1
+resource function_app2 'Microsoft.Web/sites@2020-06-01' = {
+  name: concat(function_app_name, '-2')
   location: location
   kind: 'functionapp'
   dependsOn: [
