@@ -12,7 +12,7 @@
 			"type": "process",
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/src\\function"
+				"cwd": "${workspaceFolder}/src\\automation"
 			}
 		},
 		{
@@ -31,7 +31,7 @@
 			},
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/src\\function"
+				"cwd": "${workspaceFolder}/src\\automation"
 			}
 		},
 		{
@@ -47,7 +47,7 @@
 			"type": "process",
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/src\\function"
+				"cwd": "${workspaceFolder}/src\\automation"
 			}
 		},
 		{
@@ -64,14 +64,14 @@
 			"dependsOn": "clean release",
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/src\\function"
+				"cwd": "${workspaceFolder}/src\\automation"
 			}
 		},
 		{
 			"type": "func",
 			"dependsOn": "build",
 			"options": {
-				"cwd": "${workspaceFolder}/src\\function/bin/Debug/netcoreapp3.1"
+				"cwd": "${workspaceFolder}/src\\automation/bin/Debug/netcoreapp3.1"
 			},
 			"command": "host start",
 			"isBackground": true,

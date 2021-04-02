@@ -1,6 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using CsvHelper;
-using function.models;
+using automation.model;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Services.AppAuthentication;
@@ -15,7 +15,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace function
+namespace automation.service
 {
     static class ClockodoBackupService
     {
@@ -49,7 +49,7 @@ namespace function
 
             using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonToCsv(entryModel.entries, ","))))
             {
-                
+
                 if (!client.GetBlobClient(backupFileName).Exists())
                 {
                     await client.UploadBlobAsync($"{backupFileName}", stream);
@@ -67,7 +67,8 @@ namespace function
             {
                 using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
-                    csv.Configuration.Delimiter = delimiter;
+                    //csv.Configuration.Delimiter = delimiter;
+                    delimiter = csv.Configuration.Delimiter;
                     csv.WriteHeader<EntryModel.Entry>();
                     csv.NextRecord();
                     csv.WriteRecords(tasks);

@@ -1,4 +1,5 @@
-namespace function.models
+﻿namespace automation.model
+
 {
     public class EntryModel
     {
