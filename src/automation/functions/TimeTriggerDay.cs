@@ -18,8 +18,10 @@ namespace automation
             var connectionString = GetEnvironmentVariable("AzureWebJobsStorage");
 
             var now = DateTime.Now;
+            var date_since = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+            var date_until = new DateTime(now.Year, now.Month, now.Day, 23, 59, 59);
             await ClockodoBackupService.BackupAsync(keyvaultName, HttpClient, connectionString,
-                now.AddDays(-1).AddMonths(-1), now, $"Daylybackup/{now.ToString($"MM-dd-yyyy-backup")}.csv");
+                date_since, date_until, $"Daylybackup/{now.ToString($"MM-dd-yyyy-backup")}.csv");
         }
 
         public static string GetEnvironmentVariable(string environmentVariable)
