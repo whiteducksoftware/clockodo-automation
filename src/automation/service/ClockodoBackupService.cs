@@ -67,7 +67,6 @@ namespace automation.service
             {
                 using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
-                    //csv.Configuration.Delimiter = delimiter;
                     delimiter = csv.Configuration.Delimiter;
                     csv.WriteHeader<EntryModel.Entry>();
                     csv.NextRecord();
