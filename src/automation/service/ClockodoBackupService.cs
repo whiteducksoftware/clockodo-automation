@@ -14,6 +14,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace automation.service
 {
@@ -36,10 +37,8 @@ namespace automation.service
                     { "time_until", $"{dateTimeUntil:yyyy'-'MM'-'dd HH:mm:ss}"}
                 });
 
-            var strDecoded = requestUri;
-            strDecoded = WebUtility.UrlDecode(strDecoded);
-            strDecoded = Uri.UnescapeDataString(strDecoded);
-
+            var strDecoded = WebUtility.UrlDecode(requestUri);
+            
             var httpResponse = await httpClient.GetAsync(strDecoded);
             var content = await httpResponse.Content.ReadAsStringAsync();
 
