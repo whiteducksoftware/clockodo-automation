@@ -12,12 +12,12 @@ namespace automation
         private static readonly HttpClient HttpClient = new HttpClient();
 
         [FunctionName("TimeTriggerMonth")]
-        public async Task Run([TimerTrigger("10 */0 * * * *")] TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("0 0 0 1 * *")] TimerInfo myTimer, ILogger log)
         {
            var keyVaultName = GetEnvironmentVariable("KEYVAULT_NAME");
            var connectionString = GetEnvironmentVariable("AzureWebJobsStorage");
 
-           var now = DateTime.Now;
+           var now = DateTime.Now.AddDays(-1);
            var daysInMonth = DateTime.DaysInMonth(now.Year, now.Month);
            var dateSince = new DateTime(now.Year, now.Month, 1, 0, 0, 0);
            var dateUntil = new DateTime(now.Year, now.Month, daysInMonth, 23, 59, 59);
