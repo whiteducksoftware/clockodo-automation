@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/static/v1?label=Azure-FUNC%20&message=v3.0&style=for-the-badge&color=blue">
   </a>
   <a href="https://github.com/dotnet/core">
-    <img src="https://img.shields.io/static/v1?label=.net%20&message=v5.0&style=for-the-badge&color=blue">
+    <img src="https://img.shields.io/static/v1?label=.net%20&message=v3.1&style=for-the-badge&color=blue">
   </a>
   <a href="https://github.com/whiteducksoftware/clockodo-automation/blob/master/LICENSE">
     <img src="https://img.shields.io/static/v1?label=LICENSE&message=MIT&style=for-the-badge&color=brightgreen">
@@ -28,7 +28,7 @@
 </p>
 
 ---
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwhiteducksoftware%2Fclockodo-automation%2FupdateBicep%2Fsrc%2Finfrastructure%2FmainTemplate.json%3Ftoken%3DAG3CYXZABN4A5PMUZFDBNTTAEKOAY)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://porta.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwhiteducksoftware%2Fclockodo-automation%2FupdateBicep%2Fsrc%2Finfrastructure%2FmainTemplate.json%3Ftoken%3DAG3CYXZABN4A5PMUZFDBNTTAEKOAY)
 
 ## The purpose of this project are two things:
 
