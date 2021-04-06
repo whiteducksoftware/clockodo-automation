@@ -37,7 +37,6 @@
 
 ## Technologies
 
-- C# .NET 5
 - Azure Biceps 💪 to generate ARM templates
 - DevContainer
 
