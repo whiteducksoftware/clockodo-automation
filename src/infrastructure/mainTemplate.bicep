@@ -107,7 +107,7 @@ resource blob_container 'Microsoft.Storage/storageAccounts/blobServices/containe
   ]
 }
 
-// function app day
+// function app
 resource function_app 'Microsoft.Web/sites@2020-06-01' = {
   name: function_app_name
   location: location
