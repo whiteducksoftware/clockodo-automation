@@ -14,14 +14,14 @@ namespace automation
         [FunctionName("TimeTriggerDay")]
         public async Task Run([TimerTrigger("10 */0 * * * *")] TimerInfo myTimer, ILogger log)
         {
-            var keyvaultName = GetEnvironmentVariable("KEYVAULT_NAME");
+            var keyVaultName = GetEnvironmentVariable("KEYVAULT_NAME");
             var connectionString = GetEnvironmentVariable("AzureWebJobsStorage");
 
             var now = DateTime.Now;
-            var date_since = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
-            var date_until = new DateTime(now.Year, now.Month, now.Day, 23, 59, 59);
-            await ClockodoBackupService.BackupAsync(keyvaultName, HttpClient, connectionString,
-                date_since, date_until, $"Daylybackup/{now.ToString($"MM-dd-yyyy-backup")}.csv");
+            var dateSince = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+            var dateUntil = new DateTime(now.Year, now.Month, now.Day, 23, 59, 59);
+            await ClockodoBackupService.BackupAsync(keyVaultName, HttpClient, connectionString,
+                dateSince, dateUntil, $"Daylybackup/{now.ToString($"MM-dd-yyyy-backup")}.csv");
         }
 
         public static string GetEnvironmentVariable(string environmentVariable)
