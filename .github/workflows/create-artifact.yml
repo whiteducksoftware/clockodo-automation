@@ -11,7 +11,7 @@ jobs:
       - uses: papeloto/action-zip@v1
         with:
           files: src/automation
-          recursive: true
+          recursive: false
           dest: function.zip
 
       - uses: actions/upload-artifact@v1
