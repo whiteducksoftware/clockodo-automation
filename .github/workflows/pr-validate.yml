@@ -1,5 +1,5 @@
 name: validate-PR
-on: pull_request
+on: [pull_request, workflow_dispatch]
 jobs:
   validate_bicep_and_dotnet_build:
     runs-on: ubuntu-latest
