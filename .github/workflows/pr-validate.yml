@@ -18,4 +18,8 @@ jobs:
         with:
           dotnet-version: '3.1.x'
       - run: dotnet publish src/automation/automation.csproj -o release
+      - uses: actions/upload-artifact@v1
+        with:
+          name: automation-function
+          path: ${{ github.workspace }}/release
   

@@ -11,16 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Run Bicep build
+        uses: aliencube/bicep-build-actions@v0.1
+        with:
+          files: src/infrastructure/mainTemplate.bicep
+
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.1.x'
 
       - run: dotnet publish src/automation/automation.csproj -o release
-
-      - uses: actions/upload-artifact@v1
-        with:
-          name: automation-function
-          path: ${{ github.workspace }}/release
 
       - uses: papeloto/action-zip@v1
         with:
@@ -39,8 +39,8 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Upload Release Asset
-        id: upload-release-asset 
+      - name: Upload Release Assets (zip)
+        id: upload-release-asset-zip 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -50,4 +50,13 @@ jobs:
           asset_name: clockodo-automation.zip
           asset_content_type: application/zip
 
-  
+      - name: Upload Release Assets (json)
+        id: upload-release-asset-json
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          asset_path: src/infrastructure/mainTemplate.json
+          asset_name: mainTemplate.json
+          asset_content_type: application/json
