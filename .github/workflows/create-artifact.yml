@@ -1,6 +1,9 @@
 name: create-artifact
 on: 
   workflow_dispatch:
+  push:
+    tags:
+      - '**'
 
 jobs:
   publish_zip_archive:
