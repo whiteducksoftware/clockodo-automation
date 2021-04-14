@@ -1,0 +1,22 @@
+name: create-artifact
+on: 
+  pull_request:
+    types: [closed]
+jobs:
+  publish_zip_archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: papeloto/action-zip@v1
+        with:
+          files: src/automation
+          recursive: true
+          dest: function.zip
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: automation-function
+          path: ${{ github.workspace }}/function.zip
+
+  
