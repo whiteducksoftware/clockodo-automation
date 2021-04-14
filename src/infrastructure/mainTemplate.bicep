@@ -144,6 +144,10 @@ resource function_app 'Microsoft.Web/sites@2020-06-01' = {
           value: toLower(function_app_name)
         }
         {
+          name: 'WEBSITE_RUN_FROM_PACKAGE'
+          value: '' //todo add URL
+        }
+        {
           name: 'KEYVAULT_NAME'
           value: akv_name
         }
