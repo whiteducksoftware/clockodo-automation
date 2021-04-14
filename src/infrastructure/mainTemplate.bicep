@@ -145,7 +145,7 @@ resource function_app 'Microsoft.Web/sites@2020-06-01' = {
         }
         {
           name: 'WEBSITE_RUN_FROM_PACKAGE'
-          value: '' //todo add URL
+          value: 'https://github.com/whiteducksoftware/clockodo-automation/releases/latest/download/clockodo-automation.zip' //todo add URL
         }
         {
           name: 'KEYVAULT_NAME'

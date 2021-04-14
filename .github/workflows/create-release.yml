@@ -11,14 +11,20 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+
+      - run: dotnet publish src/automation/automation.csproj -o release
+
       - uses: actions/upload-artifact@v1
         with:
           name: automation-function
-          path: ${{ github.workspace }}/src/automation
+          path: ${{ github.workspace }}/release
 
       - uses: papeloto/action-zip@v1
         with:
-          files: src/automation
+          files: release
           recursive: true
           dest: function.zip
           
@@ -31,7 +37,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           draft: false
-          prerelease: false
+          prerelease: true
 
       - name: Upload Release Asset
         id: upload-release-asset 
