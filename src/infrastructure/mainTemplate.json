@@ -7,7 +7,7 @@
       "defaultValue": "clockautom"
     },
     "clockodo_api_user": {
-      "type": "secureString",
+      "type": "string",
       "metadata": {
         "description": "User for accessing the Clockodo API"
       }
@@ -156,6 +156,10 @@
               "value": "[toLower(variables('function_app_name'))]"
             },
             {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "https://github.com/whiteducksoftware/clockodo-automation/releases/latest/download/clockodo-automation.zip"
+            },
+            {
               "name": "KEYVAULT_NAME",
               "value": "[variables('akv_name')]"
             },
@@ -184,5 +188,12 @@
         "Application_Type": "web"
       }
     }
-  ]
+  ],
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.3.126.58533",
+      "templateHash": "15792493740476977272"
+    }
+  }
 }
