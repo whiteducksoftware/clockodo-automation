@@ -28,7 +28,7 @@
 </p>
 
 ---
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwhiteducksoftware%2Fclockodo-automation%2Fmaster%2Fsrc%2Finfrastructure%2FmainTemplate.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2F55e62e20a04044a3c2354d2960425952.m.pipedream.net%2F)
 
 ## The purpose of this project are two things:
 
