@@ -39,7 +39,7 @@ A small solution for creating automated backups of your Clockodo entries. The "D
 - Function App 
 - Application Insights
 
-By default, the deployment will create two functions that will perform backups on a daily and monthly basis. 
+By default, the deployment will create two functions that will perform backups on a daily and monthly basis. For more information check out the repository's [Wiki](https://github.com/whiteducksoftware/clockodo-automation/wiki) page.
 
 ### Prerequisites
 - Azure Subscription
