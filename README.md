@@ -28,7 +28,23 @@
 </p>
 
 ---
+## Try it out
+
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2F55e62e20a04044a3c2354d2960425952.m.pipedream.net%2F)
+
+A small solution for creating automated backups of your Clockodo entries. The "Deploy to Azure" button will create a small environment consisting of: 
+- Azure Key vault
+- Storage account with blob container
+- App Service plan
+- Function App 
+- Application Insights
+
+By default, the deployment will create two functions that will perform backups on a daily and monthly basis. 
+
+### Prerequisites
+- Azure Subscription
+- E-mail address of a Clockodo API User
+- Clockodo API key
 
 ## The purpose of this project are two things:
 
