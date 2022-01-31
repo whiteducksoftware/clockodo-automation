@@ -11,10 +11,10 @@
     <img src="https://img.shields.io/static/v1?label=Azure-Bicep&message=v0.2.59&style=for-the-badge&logo&color=brightgreen">
   </a>
   <a href="https://docs.microsoft.com/en-us/azure/azure-functions/">
-    <img src="https://img.shields.io/static/v1?label=Azure-FUNC%20&message=v3.0&style=for-the-badge&color=blue">
+    <img src="https://img.shields.io/static/v1?label=Azure-FUNC%20&message=v4.0&style=for-the-badge&color=blue">
   </a>
   <a href="https://github.com/dotnet/core">
-    <img src="https://img.shields.io/static/v1?label=.net%20&message=v3.1&style=for-the-badge&color=blue">
+    <img src="https://img.shields.io/static/v1?label=.net%20&message=v6.0&style=for-the-badge&color=blue">
   </a>
   <a href="https://github.com/whiteducksoftware/clockodo-automation/blob/master/LICENSE">
     <img src="https://img.shields.io/static/v1?label=LICENSE&message=MIT&style=for-the-badge&color=brightgreen">

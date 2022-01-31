@@ -12,7 +12,7 @@ namespace automation
         private static readonly HttpClient HttpClient = new HttpClient();
 
         [FunctionName("TimeTriggerDay")]
-        public async Task Run([TimerTrigger("0 59 23 * * *")] TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("10 */0 * * * *")] TimerInfo myTimer, ILogger log)
         {
             var keyVaultName = GetEnvironmentVariable("KEYVAULT_NAME");
             var connectionString = GetEnvironmentVariable("AzureWebJobsStorage");
