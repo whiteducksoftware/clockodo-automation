@@ -43,7 +43,7 @@ namespace automation.service
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
                 Convert.ToBase64String(Encoding.UTF8.GetBytes($"{apiUser}:{apiKey}")));
 
-            httpClient.DefaultRequestHeaders.Add("X-Clockodo-External-Application", "test");
+            httpClient.DefaultRequestHeaders.Add("X-Clockodo-External-Application", "backup");
 
             var requestUri = QueryHelpers.AddQueryString("https://my.clockodo.com/api/v2/entries",
                 new Dictionary<string, string>
@@ -53,8 +53,6 @@ namespace automation.service
                 });
 
             var strDecoded = WebUtility.UrlDecode(requestUri);
-
-            Console.WriteLine(strDecoded);
 
             var httpResponse = await httpClient.GetAsync(strDecoded);
             var content = await httpResponse.Content.ReadAsStringAsync();
