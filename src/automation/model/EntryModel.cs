@@ -38,7 +38,7 @@
             public string time_clocked_since { get; set; }
             public bool clocked { get; set; }
             public bool clocked_offline { get; set; }
-            public int hourly_rate { get; set; }
+            public double hourly_rate { get; set; }
             public int lumpsum_services_id { get; set; }
             public int lumpsum_services_amount { get; set; }
         }
