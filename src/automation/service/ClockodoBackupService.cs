@@ -43,11 +43,13 @@ namespace automation.service
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
                 Convert.ToBase64String(Encoding.UTF8.GetBytes($"{apiUser}:{apiKey}")));
 
-            var requestUri = QueryHelpers.AddQueryString("https://my.clockodo.com/api/entries",
+            httpClient.DefaultRequestHeaders.Add("X-Clockodo-External-Application", "backup");
+
+            var requestUri = QueryHelpers.AddQueryString("https://my.clockodo.com/api/v2/entries",
                 new Dictionary<string, string>
                 {
-                    {"time_since", $"{dateTimeSince:yyyy'-'MM'-'dd HH:mm:ss}"},
-                    {"time_until", $"{dateTimeUntil:yyyy'-'MM'-'dd HH:mm:ss}"}
+                    {"time_since", $"{dateTimeSince.ToUniversalTime().ToString("s") + "Z"}"},
+                    {"time_until", $"{dateTimeUntil.ToUniversalTime().ToString("s") + "Z"}"},
                 });
 
             var strDecoded = WebUtility.UrlDecode(requestUri);
