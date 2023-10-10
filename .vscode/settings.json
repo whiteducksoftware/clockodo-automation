@@ -1,8 +1,9 @@
 {
-    "azureFunctions.deploySubpath": "src\\automation/bin/Release/net6.0/publish",
-    "azureFunctions.projectLanguage": "C#",
-    "azureFunctions.projectRuntime": "~4",
-    "debug.internalConsoleOptions": "neverOpen",
-    "azureFunctions.preDeployTask": "publish",
-    "azureFunctions.projectSubpath": "src\\automation"
+  "azureFunctions.deploySubpath": "src\\automation/bin/Release/net6.0/publish",
+  "azureFunctions.projectLanguage": "C#",
+  "azureFunctions.projectRuntime": "~4",
+  "debug.internalConsoleOptions": "neverOpen",
+  "azureFunctions.preDeployTask": "publish",
+  "azureFunctions.projectSubpath": "src\\automation",
+  "dotnet.defaultSolution": "src/automation/automation.sln"
 }
