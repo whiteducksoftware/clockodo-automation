@@ -5,14 +5,14 @@ using Microsoft.Extensions.Logging;
 using automation.service;
 using System.Threading.Tasks;
 
-namespace automation
+namespace automation.Functions
 {
-    public class TimeTriggerMonth
+    public static class TimeTriggerMonth
     {
         private static readonly HttpClient HttpClient = new HttpClient();
 
         [FunctionName("TimeTriggerMonth")]
-        public async Task Run([TimerTrigger("0 0 0 1 * *")] TimerInfo myTimer, ILogger log)
+        public static async Task Run([TimerTrigger("0 0 0 1 * *")] TimerInfo myTimer, ILogger log)
         {
            var keyVaultName = GetEnvironmentVariable("KEYVAULT_NAME");
            var connectionString = GetEnvironmentVariable("AzureWebJobsStorage");
@@ -26,7 +26,7 @@ namespace automation
                dateSince, dateUntil, $"Monthlybackup/{now.ToString($"MM-yyyy-backup")}.csv");
         }
 
-        public static string GetEnvironmentVariable(string environmentVariable)
+        private static string GetEnvironmentVariable(string environmentVariable)
         {
            return Environment.GetEnvironmentVariable(environmentVariable, EnvironmentVariableTarget.Process);
         }

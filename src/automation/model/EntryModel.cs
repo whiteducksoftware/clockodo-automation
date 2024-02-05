@@ -1,7 +1,7 @@
 ﻿namespace automation.model
 
 {
-    public class EntryModel
+    public abstract class EntryModel
     {
         public class Rootobject
         {
@@ -10,7 +10,7 @@
             public Entry[] entries { get; set; }
         }
 
-        public class Paging
+        public abstract class Paging
         {
             public int items_per_page { get; set; }
             public int current_page { get; set; }
@@ -18,7 +18,7 @@
             public int count_items { get; set; }
         }
 
-        public class Entry
+        public abstract class Entry
         {
             public int id { get; set; }
             public int customers_id { get; set; }

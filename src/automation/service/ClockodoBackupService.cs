@@ -37,8 +37,8 @@ namespace automation.service
             var secretClient = new SecretClient(new Uri($"https://{keyVaultName}.vault.azure.net/"),
                 new DefaultAzureCredential(), options);
 
-            var apiUser = secretClient.GetSecret("ClockodoApiUser").Value.Value;
-            var apiKey = secretClient.GetSecret("ClockodoApiKey").Value.Value;
+            var apiUser = (await secretClient.GetSecretAsync("ClockodoApiUser")).Value.Value;
+            var apiKey = (await secretClient.GetSecretAsync("ClockodoApiKey")).Value.Value;
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
                 Convert.ToBase64String(Encoding.UTF8.GetBytes($"{apiUser}:{apiKey}")));
@@ -61,34 +61,28 @@ namespace automation.service
 
             var client = new BlobContainerClient(connectionString, "backups");
 
-            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonToCsv(entryModel.entries, ","))))
+            await using Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonToCsv(entryModel.entries, ",")));
+            if (!await client.GetBlobClient(backupFileName).ExistsAsync())
             {
-
-                if (!client.GetBlobClient(backupFileName).Exists())
-                {
-                    await client.UploadBlobAsync($"{backupFileName}", stream);
-                }
-                else
-                {
-                    Console.WriteLine("Backup exists");
-                }
+                await client.UploadBlobAsync($"{backupFileName}", stream);
+            }
+            else
+            {
+                Console.WriteLine("Backup exists");
             }
         }
 
-        public static string JsonToCsv(EntryModel.Entry[] tasks, string delimiter)
+        private static string JsonToCsv(IEnumerable<EntryModel.Entry> tasks, string delimiter)
         {
-            using (var writer = new StringWriter())
+            using var writer = new StringWriter();
+            using (var csv = new CsvWriter(writer,
+                       new CsvConfiguration(CultureInfo.InvariantCulture) {Delimiter = delimiter}))
             {
-                using (var csv = new CsvWriter(writer,
-                    new CsvConfiguration(CultureInfo.InvariantCulture) {Delimiter = delimiter}))
-                {
-                    csv.WriteHeader<EntryModel.Entry>();
-                    csv.NextRecord();
-                    csv.WriteRecords(tasks);
-                }
-
-                return writer.ToString();
+                csv.WriteHeader<EntryModel.Entry>();
+                csv.NextRecord();
+                csv.WriteRecords(tasks);
             }
+            return writer.ToString();
         }
     }
 }

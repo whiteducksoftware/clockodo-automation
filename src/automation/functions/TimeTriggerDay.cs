@@ -5,14 +5,14 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using automation.service;
 
-namespace automation
+namespace automation.Functions
 {
-    public class TimeTriggerDay
+    public static class TimeTriggerDay
     {
         private static readonly HttpClient HttpClient = new HttpClient();
 
         [FunctionName("TimeTriggerDay")]
-        public async Task Run([TimerTrigger("0 59 23 * * *")] TimerInfo myTimer, ILogger log)
+        public static async Task Run([TimerTrigger("0 59 23 * * *")] TimerInfo myTimer, ILogger log)
         {
             var keyVaultName = GetEnvironmentVariable("KEYVAULT_NAME");
             var connectionString = GetEnvironmentVariable("AzureWebJobsStorage");
@@ -24,7 +24,7 @@ namespace automation
                 dateSince, dateUntil, $"Daylybackup/{now.ToString($"MM-dd-yyyy-backup")}.csv");
         }
 
-        public static string GetEnvironmentVariable(string environmentVariable)
+        private static string GetEnvironmentVariable(string environmentVariable)
         {
             return Environment.GetEnvironmentVariable(environmentVariable, EnvironmentVariableTarget.Process);
         }
